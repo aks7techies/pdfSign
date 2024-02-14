@@ -7,9 +7,9 @@ function Header() {
     <>
    
       <nav className="navbar navbar-expand-lg bg-color1">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">
-            PDFSignature
+        <div className="container-fluid px-4">
+          <a className="navbar-brand text-light" href="/">
+            <b>PDFSigner</b>
           </a>
           <button
             className="navbar-toggler"
@@ -22,11 +22,11 @@ function Header() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <div className="collapse navbar-collapse ps-5" id="navbarTogglerDemo02">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/dashboard">
-                 <HomeIcon color='dark'/> Home
+                <a className="nav-link active text-light" aria-current="page" href="/dashboard">
+                 <HomeIcon /> Home
                 </a>
               </li>
               

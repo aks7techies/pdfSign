@@ -21,10 +21,10 @@ function ButtonAction() {
     <section className="container-fluid p-4">
         <Stack spacing={2} direction="row" className="shadow px-4 py-2">
           <Button variant="outlined" onClick={Complete}>
-            Completed
+            Sign for Document
           </Button>
           <Button variant="outlined" onClick={unComplete}>
-            Un-Completed
+            Pending for Document
           </Button>
         </Stack>
       </section>

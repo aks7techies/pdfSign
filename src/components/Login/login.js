@@ -1,13 +1,20 @@
 import React from "react";
+import  {useNavigate}  from 'react-router-dom';
 import './login.css';
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const login = () => {
+
+function Login(){
+  const history = useNavigate();
+
   const initialValues = {
     email: "",
     password: "",
   };
+ 
 
   const signInSchema = Yup.object().shape({
     email: Yup.string().email().required("Email is required*"),
@@ -19,11 +26,16 @@ const login = () => {
 
   const submitForm = (values) => {
     console.log(values);
+    toast.success("Success Login !", {
+      position: "top-right"
+    });
+    history("/dashboard");
     // Add your form submission logic here
   };
 
   return (
     <div>
+      <ToastContainer />
       <section className="vh-100 bg area">
       <ul className="circles">
                     <li></li>
@@ -37,6 +49,7 @@ const login = () => {
                     <li></li>
                     <li></li>
             </ul>
+            
         <div className="container py-5 h-100">
 
           <div className="row d-flex justify-content-center align-items-center h-100">
@@ -58,7 +71,7 @@ const login = () => {
                           className="fas fa-cubes fa-2x me-3"
                           style={{ color: "#ff6219" }}
                         ></i>
-                        <span className="h1 fw-bold mb-0">PDF Signature</span>
+                        <span className="h1 fw-bold mb-0">PDF Signer</span>
                       </div>
 
                       <h5
@@ -161,4 +174,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
