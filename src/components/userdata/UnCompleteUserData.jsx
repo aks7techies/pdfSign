@@ -3,10 +3,10 @@ import Header from '../../layouts/header/Header'
 import Footer from '../../layouts/footer/Footer';
 import Button from "@mui/material/Button";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
 function UnCompleteUserData() {
 
-  const confirmFunction =()=>{
+  const reSendFunction =()=>{
 
   }
 
@@ -23,7 +23,7 @@ function UnCompleteUserData() {
           <div className="card-header">
             <div className="row">
               <div className="d-flex justify-content-between">
-                <h3>Pending  Documents List</h3>
+                <h3>Unprocessed  Documents List</h3>
                 {/* <Button onClick={handleOpen}>
                   {" "}
                   <AddIcon /> Add User
@@ -174,6 +174,7 @@ function UnCompleteUserData() {
                     <th scope="col">Date Time</th>
                     <th scope="col">Document Name</th>
                     <th scope="col">Orginal Document</th> 
+                    <th scope="col">Date Time</th> 
                     <th scope="col">Action</th>
                   
                 </tr>
@@ -182,14 +183,14 @@ function UnCompleteUserData() {
                 <tr>
                    <th scope="row">1</th>
                     <td>Mark</td>
-                    <td>Otto</td>
-                    <td>{new Date().toDateString()}</td>
+                    <td>Otto1@gmail.com</td>
+                    <td>{new Date().toLocaleDateString()} <br />{new Date().toLocaleTimeString()} </td>
                     <td>@mdo</td>
-                    <td><a href="#"> Evidence </a></td>
-                   
+                    <td><a href="/"> View </a></td>
+                    <td>{new Date().toLocaleDateString()} <br />{new Date().toLocaleTimeString()} </td>
                     <td>
-                    <Button className="text-capitalize" onClick={confirmFunction}>
-                     <DeleteIcon className="text-danger" /> 
+                    <Button className="text-capitalize" onClick={reSendFunction} title='Resend'>
+                    <SendIcon className='text-warning' />
                    </Button>
                     </td>
 

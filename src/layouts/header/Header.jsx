@@ -26,7 +26,7 @@ function Header() {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <a className="nav-link active text-light" aria-current="page" href="/dashboard">
-                 <HomeIcon /> Home
+                 <HomeIcon />  <span className='pt-4 fw-medium'> Home</span>
                 </a>
               </li>
               
