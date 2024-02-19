@@ -13,7 +13,7 @@ function Home() {
       <section className="container-fluid px-4">
         <div className="row">
           <div className="col-md-3 col-sm-12 mb-3">
-            <div className="card text-white bg-info">
+            <div className="card text-white bg-info1">
               <div className="card-body">
                 
                 <div class="row d-flex align-items-center mb-4">
@@ -36,7 +36,7 @@ function Home() {
             </div>
           </div>
           <div className="col-md-3 col-sm-12 mb-3">
-            <div className="card text-white bg-info">
+            <div className="card text-white bg-info1">
               <div className="card-body">
                
                 <div class="row d-flex align-items-center mb-4">
@@ -60,7 +60,7 @@ function Home() {
           </div>
 
           <div className="col-md-3 col-sm-12 mb-3">
-            <div className="card text-white bg-info">
+            <div className="card text-white bg-info1">
               <div className="card-body">
                 
                 <div class="row d-flex align-items-center mb-4">

@@ -1,5 +1,6 @@
 .area{
-    background:  #b4d1f3;  
+    /* background:  #b4d1f3;   */
+    background:  #4a7aab;  
     background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
     width: 100%;
     height:100vh;
@@ -121,3 +122,41 @@
     }
 
 }
+
+/* @keyframes rotate360 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+} */
+
+/* Applying animation to the card */
+/* .card {
+   
+    animation: rotate360 1s ease-in-out;
+} */
+
+    /* Custom animation */
+    @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+    }
+
+    /* Applying animation to the card */
+    .card {
+        animation: slideInRight 1s ease-in-out;
+    }
+
+    .line{
+         width: 229px ;
+         padding: 2px 0px;
+         color: #0044bf;
+         background: #0044c1;
+    }
+    @media (max-width: 999px ) {
+      .line{
+        width: 210px;
+      }
+    }

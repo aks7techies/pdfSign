@@ -58,21 +58,23 @@ function Login(){
                 <div className="row g-0">
                   <div className="col-md-6 col-lg-5 d-none d-md-block">
                     <img
-                      src="assets/images/electronic-signature-e-sign.jpg"
+                      // src="assets/images/electronic-signature-e-sign.jpg"
+                      src="assets/images/digital-signature.png"
                       alt="login form"
                       className="img-fluid h-100"
                       style={{ borderRadius: "1rem 0 0 1rem" }}
                     />
                   </div>
                   <div className="col-md-6 col-lg-7 d-flex align-items-center">
-                    <div className="card-body p-4 p-lg-5 text-black">
-                      <div className="d-flex align-items-center mb-3 pb-1">
+                    <div className="card-body p-4  text-black">
+                      <div className="d-flex align-items-center  ">
                         <i
                           className="fas fa-cubes fa-2x me-3"
                           style={{ color: "#ff6219" }}
                         ></i>
                         <span className="h1 fw-bold mb-0">PDF Signer</span>
                       </div>
+                      <hr className="m-2 line"/>
 
                       <h5
                         className="fw-normal mb-3 pb-3"
