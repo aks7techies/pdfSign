@@ -57,3 +57,13 @@
   border: 4px dashed #ffffff;
 }
   
+#container {
+  width: 100%; /* Adjust the width as needed */
+  height: 100vh; /* Adjust the height as needed */
+  overflow: auto; /* Add scrollbars if the content overflows the container */
+}
+
+.pdf-content {
+  width: 100%; /* Set the width of the PDF content to fill the container */
+  /* Optionally adjust other styles like font size, line height, etc. */
+}

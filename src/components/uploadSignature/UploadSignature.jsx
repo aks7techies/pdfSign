@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect } from "react";
 // import {Formik, Field, ErrorMessage} from "formik";
 // import * as Yup from "yup";
 import {useDropzone} from "react-dropzone";
@@ -7,6 +7,7 @@ import "./uploadSignature.css";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import { PDFDocument, rgb, degrees, StandardFonts } from 'pdf-lib';
 // import Webcam from "react-webcam";
 import {Document, Page, pdfjs} from "react-pdf";
 
@@ -21,6 +22,102 @@ const UploadSignature = () => {
   const [writeName, setWriteName] = React.useState(null);
   const [scale, setScale] = React.useState(1.2);
   const [value, setValue] = React.useState("1");
+  const [pdfBytes, setPdfBytes] = React.useState(null);
+
+  
+
+  useEffect(()=>{
+    // modifyPdf();
+    embedImages();
+
+  },[])
+ 
+    const modifyPdf = async () => {
+      const url = 'assets/uploads/file2.pdf';
+      try {
+        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+
+        const pdfDoc = await PDFDocument.load(existingPdfBytes);
+        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+        const pages = pdfDoc.getPages();
+        const firstPage = pages[0];
+        const { width, height } = firstPage.getSize();
+        firstPage.drawText('Hello', {
+          x: 480,
+          y: height / 2 + 180,
+          size: 8,
+          font: helveticaFont,
+          color: rgb(0.95, 0.1, 0.1),
+          rotate: degrees(0),
+        });
+
+        const pdfBytes = await pdfDoc.save();
+        setPdfBytes(pdfBytes);
+        console.log('PDF modification completed.');
+      } catch (error) {
+        console.error('Error modifying PDF:', error);
+      }
+    };
+
+   
+    
+
+
+  const embedImages = async () => {
+    const jpgUrl = 'assets/images/digital-signature.png';
+    // const pngUrl = 'https://pdf-lib.js.org/assets/minions_banana_alpha.png';
+
+    try {
+      const jpgImageBytes = await fetch(jpgUrl).then((res) => res.arrayBuffer());
+      // const pngImageBytes = await fetch(pngUrl).then((res) => res.arrayBuffer());
+
+      const pdfDoc = await PDFDocument.create();
+
+      const jpgImage = await pdfDoc.embedJpg(jpgImageBytes);
+      // const pngImage = await pdfDoc.embedPng(pngImageBytes);
+
+      const jpgDims = jpgImage.scale(0.5);
+      // const pngDims = pngImage.scale(0.5);
+
+      const page = pdfDoc.addPage();
+
+      page.drawImage(jpgImage, {
+        x: page.getWidth() / 2 - jpgDims.width / 2,
+        y: page.getHeight() / 2 - jpgDims.height / 2 + 250,
+        width: 100, // Adjusted width
+        height: 100, // Adjusted height
+      });
+      // page.drawImage(pngImage, {
+      //   x: page.getWidth() / 2 - pngDims.width / 2 + 75,
+      //   y: page.getHeight() / 2 - pngDims.height + 250,
+      //   width: 100, // Adjusted width
+      //   height: 100, // Adjusted height
+      // });
+
+      const modifiedPdfBytes = await pdfDoc.save();
+      setPdfBytes(modifiedPdfBytes);
+    } catch (error) {
+      console.error('Error embedding images:', error);
+    }
+  };
+
+  embedImages();
+
+  const handleSavePdf = () => {
+    if (!pdfBytes) return;
+
+    const uint8Array = new Uint8Array(pdfBytes);
+    const blob = new Blob([uint8Array], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'modified_pdf.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
 
   const handleChange_123 = (event, newValue) => {
     setValue(newValue);
@@ -119,7 +216,10 @@ const UploadSignature = () => {
         </div>
       </nav>
       <div className="container-fluid ">
-     
+      <div>
+      <div>Modifying PDF...</div>
+      <button onClick={handleSavePdf} disabled={!pdfBytes}>Save PDF</button>
+    </div>
         <section className="">
           <div className="card border-0">
             <div className="card-body">

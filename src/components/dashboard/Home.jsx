@@ -21,7 +21,7 @@ function Home() {
                     <h5 class="card-title mb-0">Draft</h5>
                   </div>
                   <div class="col-4">
-                  <h2 class="text-center mb-0 ">5</h2>
+                  <h2 class="text-center mb-0 ">3</h2>
                 </div>
                 </div>
 
@@ -44,7 +44,7 @@ function Home() {
                     <h5 class="card-title mb-0">Unprocessed</h5>
                   </div>
                   <div class="col-4">
-                  <h2 class="text-center  mb-0">5</h2>
+                  <h2 class="text-center  mb-0">1</h2>
                   </div>
                 </div>
 

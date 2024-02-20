@@ -72,7 +72,7 @@ const DraftUpload = () => {
     toast.success("Success Submitted !", {
       position: "top-right",
     });
-    redirect("/complete");
+    redirect("/draft");
 
     // Add your form submission logic here
   };
@@ -241,6 +241,7 @@ const DraftUpload = () => {
                                   }
                                   name="uploadDocument"
                                   id="uploadDocument"
+                                  accept="application/pdf"
                                 />
                                 <ErrorMessage
                                   name="uploadDocument"
