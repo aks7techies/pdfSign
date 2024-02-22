@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect } from "react";
+import React, {useCallback } from "react";
 // import {Formik, Field, ErrorMessage} from "formik";
 // import * as Yup from "yup";
 import {useDropzone} from "react-dropzone";
@@ -22,20 +22,99 @@ const UploadSignature = () => {
   const [writeName, setWriteName] = React.useState(null);
   const [scale, setScale] = React.useState(1.2);
   const [value, setValue] = React.useState("1");
-  const [pdfBytes, setPdfBytes] = React.useState(null);
+ 
+  // const [pdfBytes, setPdfBytes] = React.useState(null);
+  const [pdfLink, setPdfLink] = React.useState('assets/uploads/file2.pdf');
 
   
 
-  useEffect(()=>{
-    // modifyPdf();
-    embedImages();
-
-  },[])
+  // useEffect(()=>{
  
-    const modifyPdf = async () => {
-      const url = 'assets/uploads/file2.pdf';
+  //   modifyPdf(pdfLink, writeName);
+  //   embedImages(pdfLink, fileName);
+
+  // },[])
+
+  const embedImages = async (pdfLink, imageUrl) => {
+    const pdfUrl = pdfLink; // Replace with the path to your existing PDF
+     // Path to the image you want to embed
+   
+    try {
+      const [pdfBytes2, imageBytes] = await Promise.all([
+        fetch(pdfUrl).then(res => res.arrayBuffer()),
+        fetch(imageUrl).then(res => res.arrayBuffer())
+    ]);
+
+    const pdfDoc = await PDFDocument.load(pdfBytes2);
+    let image;
+
+    // Determine the image type based on the file extension
+    const isJpeg = imageUrl.toLowerCase().endsWith('.jpg') ;
+    const isPng = imageUrl.toLowerCase().endsWith('.png');
+
+    if (isJpeg) {
+        image = await pdfDoc.embedJpg(imageBytes);
+    } else if (isPng) {
+        image = await pdfDoc.embedPng(imageBytes);
+    } else {
+        // If the image format cannot be determined from the extension, try embedding as PNG
+        try {
+            image = await pdfDoc.embedPng(imageBytes);
+        } catch (error) {
+            throw new Error('Failed to embed image: Unsupported image format. Only JPEG and PNG images are supported.');
+        }
+    }
+      
+
+
+           const page = pdfDoc.getPages()[0];
+
+
+            // Adjust the scale as needed
+
+            // Draw the PNG image on the page
+            // page.drawImage(pngImage, {
+            //     x: 100,
+            //     y: 100,
+            //     width: pngDims.width,
+            //     height: pngDims.height,
+            // });
+
+            // Draw the JPG image on the page
+            page.drawImage(image, {
+                x: 460,
+                y: 140,
+                width: 100,
+                height: 50,
+            });
+
+        const modifiedPdfBytes = await pdfDoc.save();
+        const uint8Array = new Uint8Array(modifiedPdfBytes);
+        const blob = new Blob([uint8Array], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'modified_pdf.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        // Now, modifiedPdfBytes contains the bytes of the modified PDF with the image embedded.
+        // You can save it to a file or use it as needed.
+    } catch (error) {
+      
+      console.error('Error embedding image into PDF:', error);
+    }
+   };
+
+
+
+
+
+ 
+    const modifyPdf = async (pdfLink1, text) => {
+      
       try {
-        const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+        const existingPdfBytes = await fetch(pdfLink1).then(res => res.arrayBuffer());
 
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
         const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -43,7 +122,7 @@ const UploadSignature = () => {
         const pages = pdfDoc.getPages();
         const firstPage = pages[0];
         const { width, height } = firstPage.getSize();
-        firstPage.drawText('Hello', {
+        firstPage.drawText(text, {
           x: 480,
           y: height / 2 + 180,
           size: 8,
@@ -52,71 +131,24 @@ const UploadSignature = () => {
           rotate: degrees(0),
         });
 
-        const pdfBytes = await pdfDoc.save();
-        setPdfBytes(pdfBytes);
-        console.log('PDF modification completed.');
+        const pdfBytess = await pdfDoc.save();
+        const uint8Array = new Uint8Array(pdfBytess);
+        const blob = new Blob([uint8Array], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'modified_pdf.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      
+       
       } catch (error) {
         console.error('Error modifying PDF:', error);
       }
     };
 
-   
-    
-
-
-  const embedImages = async () => {
-    const jpgUrl = 'assets/images/digital-signature.png';
-    // const pngUrl = 'https://pdf-lib.js.org/assets/minions_banana_alpha.png';
-
-    try {
-      const jpgImageBytes = await fetch(jpgUrl).then((res) => res.arrayBuffer());
-      // const pngImageBytes = await fetch(pngUrl).then((res) => res.arrayBuffer());
-
-      const pdfDoc = await PDFDocument.create();
-
-      const jpgImage = await pdfDoc.embedJpg(jpgImageBytes);
-      // const pngImage = await pdfDoc.embedPng(pngImageBytes);
-
-      const jpgDims = jpgImage.scale(0.5);
-      // const pngDims = pngImage.scale(0.5);
-
-      const page = pdfDoc.addPage();
-
-      page.drawImage(jpgImage, {
-        x: page.getWidth() / 2 - jpgDims.width / 2,
-        y: page.getHeight() / 2 - jpgDims.height / 2 + 250,
-        width: 100, // Adjusted width
-        height: 100, // Adjusted height
-      });
-      // page.drawImage(pngImage, {
-      //   x: page.getWidth() / 2 - pngDims.width / 2 + 75,
-      //   y: page.getHeight() / 2 - pngDims.height + 250,
-      //   width: 100, // Adjusted width
-      //   height: 100, // Adjusted height
-      // });
-
-      const modifiedPdfBytes = await pdfDoc.save();
-      setPdfBytes(modifiedPdfBytes);
-    } catch (error) {
-      console.error('Error embedding images:', error);
-    }
-  };
-
-  embedImages();
-
-  const handleSavePdf = () => {
-    if (!pdfBytes) return;
-
-    const uint8Array = new Uint8Array(pdfBytes);
-    const blob = new Blob([uint8Array], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'modified_pdf.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+ 
 
 
   const handleChange_123 = (event, newValue) => {
@@ -135,6 +167,7 @@ const UploadSignature = () => {
 
   const onDrop = useCallback((acceptedFiles) => {
     const valid = typeValidator(acceptedFiles[0]);
+    
     if (valid.code) {
       acceptedFiles.forEach((file) => {
         const reader = new FileReader();
@@ -143,7 +176,8 @@ const UploadSignature = () => {
           const binaryStr = reader.result;
           setPreview(binaryStr);
           setError(null);
-          setFileName(acceptedFiles[0].name);
+          setFileName(acceptedFiles[0].path);
+          handleupload(acceptedFiles[0].path);
           setWriteName(null);
         };
       });
@@ -154,6 +188,32 @@ const UploadSignature = () => {
       setWriteName(null);
     }
   }, []);
+
+
+
+
+  const handleupload = async(file)=>{
+    const formData = new FormData();
+    console.log(file);
+    formData.append('file', file);
+
+    try {
+        const response = await fetch('assets/images/', {
+            method: 'POST',
+            body: formData
+        });
+        if (response.ok) {
+            console.log('File uploaded successfully.');
+            // Optionally, you can clear the selected file state here
+          
+        } else {
+            console.error('Failed to upload file.');
+        }
+    } catch (error) {
+        console.error('Error uploading file:', error);
+    }
+
+  }
 
   const typeValidator = (file) => {
     if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
@@ -176,20 +236,22 @@ const UploadSignature = () => {
   };
   const handleChange = (values) => {
     setWriteName(values);
-    console.log(values);
-
     setFileName(null);
   };
+
   const submitForm_123 = () => {
-    // console.log();
-    if (fileName) {
-       console.log(fileName);
-    }
+    console.log(fileName); 
+    // if (fileName) {
+      embedImages(pdfLink,  `assets/images/${fileName}`);   
+  // }
     
   };
   const submitForm = () => {
     if (writeName) {
       console.log(writeName);
+
+    modifyPdf(pdfLink, writeName);
+   
     }
   };
   
@@ -216,10 +278,7 @@ const UploadSignature = () => {
         </div>
       </nav>
       <div className="container-fluid ">
-      <div>
-      <div>Modifying PDF...</div>
-      <button onClick={handleSavePdf} disabled={!pdfBytes}>Save PDF</button>
-    </div>
+     
         <section className="">
           <div className="card border-0">
             <div className="card-body">
@@ -240,7 +299,7 @@ const UploadSignature = () => {
                         </Tabs>
                       </Box>
                     </div>
-                    <form method="post">
+                   
                       <div className={"card-body" + (value ==='1' ?" d-block": " d-none") }>
                         <ul className="list-group list-group-flush">
                           <li className="list-group-item">
@@ -297,8 +356,7 @@ const UploadSignature = () => {
                           </button>
                         </div>
                       </div>
-                      </form>
-                      <form method="post">
+                     
                       <div className={"card-body" + (value === '2' ?" d-block": " d-none")}>
                         <ul className="list-group list-group-flush">
                           
@@ -334,7 +392,7 @@ const UploadSignature = () => {
                           </button>
                         </div>
                       </div>
-                    </form>
+                   
                   </div>
                 </div>
                 <div className="col-md-9 col-lg-9 col-sm-12 col-xs-12 ">
