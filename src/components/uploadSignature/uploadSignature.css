@@ -1,0 +1,69 @@
+.bg-background{
+    --bs-bg-opacity: 1;
+    background-color: #0076a3;
+}
+
+#style-3::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+#style-3::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+   
+}
+
+#style-3::-webkit-scrollbar-thumb
+{
+	background-color: #e00707;
+    border-radius: 5%;
+}
+
+.css_sty
+{
+    background-color:lightgray;
+     max-height:85vh;
+     display: flex;
+      justify-content: center; 
+}
+
+.file-upload-input {
+   
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  
+  .image-upload-wrap {
+   
+    border: 2px dashed #1e97a7;
+    position: relative;
+  }
+  .drag-text {
+    text-align: center;
+    transform: translate(-16px, -16px);
+  }
+  .image-dropping,
+.image-upload-wrap:hover {
+  background-color: #e3e8e98e;
+  border: 4px dashed #ffffff;
+}
+  
+#container {
+  width: 100%; /* Adjust the width as needed */
+  height: 100vh; /* Adjust the height as needed */
+  overflow: auto; /* Add scrollbars if the content overflows the container */
+}
+
+.pdf-content {
+  width: 100%; /* Set the width of the PDF content to fill the container */
+  /* Optionally adjust other styles like font size, line height, etc. */
+}
