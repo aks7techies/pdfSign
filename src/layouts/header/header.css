@@ -1,4 +1,205 @@
 .bg-color1{
-    --bs-bg-opacity: 1;
-    background-color: #0076a3;
+  --bs-bg-opacity: 1;
+  background-color: hsl(197, 100%, 32%);
+}
+ul{
+padding-left: 0;
+}
+
+#sidebar {
+  position: fixed;
+  z-index: 1050; 
+  top: 74px;
+  left: 0; /* Initially hidden */
+  width: 250px;
+  height: 100vh;
+  background-color: #0075a3;
+  transition: left 0.3s ease;
+}
+
+#mainContent {
+  transition: margin-left 0.3s ease;
+}
+
+.visible {
+  left: 0 !important;
+  z-index: 9; /* Slide in when visible */
+}
+
+.shifted {
+  margin-left: 250px; /* Adjust main content when sidebar is visible */
+}
+
+.sidebarBtn {
+  position: fixed;
+
+  z-index: 1; /* Ensure the button is on top */
+  cursor: pointer;
+  right: 30px;
+  color: hwb(197 0% 36%);
+  background-color: #fffefe;
+  padding: 10px;
+  border-radius: 5px;
+  display: none;
+}
+
+.sidebarBtn::after {
+  content: '☰'; /* Menu icon */
+}
+
+.toggle {
+  display: none; /* Hide the checkbox */
+}
+.profile1{
+  position: fixed;
+  left: auto;
+  right: 4px;
+  text-align: center;
+}
+.profile1 img{
+  display: block;
+  width: 45px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+.MuiStack-root ul li{
+  margin-bottom: 5px;
+}
+.MuiStack-root ul li.active{
+  background: #fff;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.MuiStack-root ul li button svg{
+  margin: 0 5px 0 0;
+}
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
+  text-transform: capitalize !important;
+}
+ 
+.profile{
+  position: absolute;
+  left: 22%;
+  text-align: center;
+  bottom: 7rem;
+ 
+ 
+}
+.drp-respons{
+  display: none;
+}
+.drp-respons a{
+  border: 1px solid #fff;
+  padding: 4px;
+  border-radius: 6px;
+  margin: 8px 4px; 
+}
+@media (max-width:999px) {
+  #sidebar {
+      top: 74px;
+      left: -250px;
+     
+  
+    }
+    .profile-ay{
+     display: none;
+    }
+    .shifted {
+      margin-left: auto; /* Adjust main content when sidebar is visible */
+    }
+    .sidebarBtn {
+     display: block;
+   right: 30px;
+    }
+    .profile{
+      left: 10px;
+    }
+    .drp-respons{
+      display: block;
+    }
+}
+.navbar-icon{
+  margin-left: 32px;
+  font-size: xx-large;
+}
+
+
+
+.profile img{
+  display: block;
+  width: 65px;
+  border-radius: 50%;
+  margin: 0 auto;
+  border: 1px solid #fff;
+  padding: 4px;
+}
+
+.profile h4{
+  color: #ffffff;
+  margin: 10px 0 5px;
+}
+
+.profile p{
+  color: rgb(206, 240, 253);
+  font-size: 14px;
+}
+
+
+
+
+
+
+
+
+
+.dropdown {
+position: relative;
+display: inline-block;
+}
+
+.dropdown-content {
+display: none;
+position: absolute;
+background-color: #f1f1f1;
+min-width: 160px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+}
+
+.dropdown-content a {
+color: #0075a3;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+text-align: start;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {
+display: block;
+right: 0;
+top: 2.5rem;
+border-radius: 10px;
+}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+
+.modal-img img{
+  height: 200px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  padding: 5px;
+}
+.profile-frm input{
+  border-color: #ddd;
+    padding: 10px;
+    background: #bceef940;
+    color: black;
+    border-radius: 8px;
+    width: 100%;
+}
+.profile-frm label{
+  font-weight: 600;
 }

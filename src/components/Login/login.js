@@ -24,12 +24,45 @@ function Login(){
       .min(4, "Password is too short - should be 4 chars minimum"),
   });
 
-  const submitForm = (values) => {
-    console.log(values);
-    toast.success("Success Login !", {
-      position: "top-right"
-    });
-    history("/dashboard");
+  const submitForm = async(values) => {
+    const url = "http://localhost:8000/api/user/login";
+
+    try {
+      const obj = {
+        username: values.email,
+        password: values.password,
+      };
+    
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    
+      if (!response.ok) {
+        toast.error("Failed Login!", {
+          position: "top-right"
+        });
+        throw new Error("Failed to login");
+       
+      }
+    
+      const data = await response.json();
+      console.log(data); // Log the response data
+    
+      toast.success("Success Login!", {
+        position: "top-right"
+      });
+    
+     setTimeout(() => {
+      history("/dashboard");
+     }, 1000); // Properly navigate to the dashboard
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    
     // Add your form submission logic here
   };
 

@@ -30,8 +30,8 @@ function UserData() {
           <ArrowBackIosNewIcon /> Back
         </a>
       </section>
-      <section className="container-fluid p-4">
-        <div className="card">
+      <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+        <div className="card w-100 border-0">
           <div className="card-header">
             <div className="row">
               <div className="d-flex justify-content-between">

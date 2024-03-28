@@ -1,15 +1,17 @@
-import React, {useCallback } from "react";
-// import {Formik, Field, ErrorMessage} from "formik";
-// import * as Yup from "yup";
+import React, {useCallback, useEffect} from "react";
+import Modal from "@mui/material/Modal";
+
+import CloseIcon from '@mui/icons-material/Close';
 import {useDropzone} from "react-dropzone";
 import "./uploadSignature.css";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { PDFDocument, rgb, degrees, StandardFonts } from 'pdf-lib';
+import {PDFDocument, rgb, degrees, StandardFonts} from "pdf-lib";
 // import Webcam from "react-webcam";
 import {Document, Page, pdfjs} from "react-pdf";
+import CapturePhoto from "./CapturePhoto";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -22,140 +24,126 @@ const UploadSignature = () => {
   const [writeName, setWriteName] = React.useState(null);
   const [scale, setScale] = React.useState(1.2);
   const [value, setValue] = React.useState("1");
- 
+
   // const [pdfBytes, setPdfBytes] = React.useState(null);
-  const [pdfLink, setPdfLink] = React.useState('assets/uploads/file2.pdf');
+  const [pdfLink, setPdfLink] = React.useState("assets/uploads/file2.pdf");
+  const [showModal, setShowModal] = React.useState(false);
 
-  
-
-  // useEffect(()=>{
- 
-  //   modifyPdf(pdfLink, writeName);
-  //   embedImages(pdfLink, fileName);
-
-  // },[])
+  useEffect(() => {
+    setShowModal(true);
+  }, []);
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   const embedImages = async (pdfLink, imageUrl) => {
     const pdfUrl = pdfLink; // Replace with the path to your existing PDF
-     // Path to the image you want to embed
-   
+    // Path to the image you want to embed
+
     try {
       const [pdfBytes2, imageBytes] = await Promise.all([
-        fetch(pdfUrl).then(res => res.arrayBuffer()),
-        fetch(imageUrl).then(res => res.arrayBuffer())
-    ]);
+        fetch(pdfUrl).then((res) => res.arrayBuffer()),
+        fetch(imageUrl).then((res) => res.arrayBuffer()),
+      ]);
 
-    const pdfDoc = await PDFDocument.load(pdfBytes2);
-    let image;
+      const pdfDoc = await PDFDocument.load(pdfBytes2);
+      let image;
 
-    // Determine the image type based on the file extension
-    const isJpeg = imageUrl.toLowerCase().endsWith('.jpg') ;
-    const isPng = imageUrl.toLowerCase().endsWith('.png');
+      // Determine the image type based on the file extension
+      const isJpeg = imageUrl.toLowerCase().endsWith(".jpg");
+      const isPng = imageUrl.toLowerCase().endsWith(".png");
 
-    if (isJpeg) {
+      if (isJpeg) {
         image = await pdfDoc.embedJpg(imageBytes);
-    } else if (isPng) {
+      } else if (isPng) {
         image = await pdfDoc.embedPng(imageBytes);
-    } else {
+      } else {
         // If the image format cannot be determined from the extension, try embedding as PNG
         try {
-            image = await pdfDoc.embedPng(imageBytes);
+          image = await pdfDoc.embedPng(imageBytes);
         } catch (error) {
-            throw new Error('Failed to embed image: Unsupported image format. Only JPEG and PNG images are supported.');
+          throw new Error(
+            "Failed to embed image: Unsupported image format. Only JPEG and PNG images are supported."
+          );
         }
-    }
-      
-
-
-           const page = pdfDoc.getPages()[0];
-
-
-            // Adjust the scale as needed
-
-            // Draw the PNG image on the page
-            // page.drawImage(pngImage, {
-            //     x: 100,
-            //     y: 100,
-            //     width: pngDims.width,
-            //     height: pngDims.height,
-            // });
-
-            // Draw the JPG image on the page
-            page.drawImage(image, {
-                x: 460,
-                y: 140,
-                width: 100,
-                height: 50,
-            });
-
-        const modifiedPdfBytes = await pdfDoc.save();
-        const uint8Array = new Uint8Array(modifiedPdfBytes);
-        const blob = new Blob([uint8Array], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'modified_pdf.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        // Now, modifiedPdfBytes contains the bytes of the modified PDF with the image embedded.
-        // You can save it to a file or use it as needed.
-    } catch (error) {
-      
-      console.error('Error embedding image into PDF:', error);
-    }
-   };
-
-
-
-
-
- 
-    const modifyPdf = async (pdfLink1, text) => {
-      
-      try {
-        const existingPdfBytes = await fetch(pdfLink1).then(res => res.arrayBuffer());
-
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-        const pages = pdfDoc.getPages();
-        const firstPage = pages[0];
-        const { width, height } = firstPage.getSize();
-        firstPage.drawText(text, {
-          x: 480,
-          y: height / 2 + 180,
-          size: 8,
-          font: helveticaFont,
-          color: rgb(0.95, 0.1, 0.1),
-          rotate: degrees(0),
-        });
-
-        const pdfBytess = await pdfDoc.save();
-        const uint8Array = new Uint8Array(pdfBytess);
-        const blob = new Blob([uint8Array], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'modified_pdf.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      
-       
-      } catch (error) {
-        console.error('Error modifying PDF:', error);
       }
-    };
+      const page = pdfDoc.getPages()[0];
 
- 
+      // Adjust the scale as needed
 
+      // Draw the PNG image on the page
+      // page.drawImage(pngImage, {
+      //     x: 100,
+      //     y: 100,
+      //     width: pngDims.width,
+      //     height: pngDims.height,
+      // });
+
+      // Draw the JPG image on the page
+      page.drawImage(image, {
+        x: 460,
+        y: 140,
+        width: 100,
+        height: 50,
+      });
+
+      const modifiedPdfBytes = await pdfDoc.save();
+      const uint8Array = new Uint8Array(modifiedPdfBytes);
+      const blob = new Blob([uint8Array], {type: "application/pdf"});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "modified_pdf.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      // Now, modifiedPdfBytes contains the bytes of the modified PDF with the image embedded.
+      // You can save it to a file or use it as needed.
+    } catch (error) {
+      console.error("Error embedding image into PDF:", error);
+    }
+  };
+
+  const modifyPdf = async (pdfLink1, text) => {
+    try {
+      const existingPdfBytes = await fetch(pdfLink1).then((res) =>
+        res.arrayBuffer()
+      );
+
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+      const pages = pdfDoc.getPages();
+      const firstPage = pages[0];
+      const {width, height} = firstPage.getSize();
+      firstPage.drawText(text, {
+        x: 480,
+        y: height / 2 + 180,
+        size: 8,
+        font: helveticaFont,
+        color: rgb(0.95, 0.1, 0.1),
+        rotate: degrees(0),
+      });
+
+      const pdfBytess = await pdfDoc.save();
+      const uint8Array = new Uint8Array(pdfBytess);
+      const blob = new Blob([uint8Array], {type: "application/pdf"});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "modified_pdf.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error modifying PDF:", error);
+    }
+  };
 
   const handleChange_123 = (event, newValue) => {
     setValue(newValue);
-    
   };
- 
+
   // console.log(error)
   // const handleZoomIn = () => {
   //   setScale(scale + 0.1);
@@ -167,7 +155,7 @@ const UploadSignature = () => {
 
   const onDrop = useCallback((acceptedFiles) => {
     const valid = typeValidator(acceptedFiles[0]);
-    
+
     if (valid.code) {
       acceptedFiles.forEach((file) => {
         const reader = new FileReader();
@@ -189,31 +177,26 @@ const UploadSignature = () => {
     }
   }, []);
 
-
-
-
-  const handleupload = async(file)=>{
+  const handleupload = async (file) => {
     const formData = new FormData();
     console.log(file);
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
-        const response = await fetch('assets/images/', {
-            method: 'POST',
-            body: formData
-        });
-        if (response.ok) {
-            console.log('File uploaded successfully.');
-            // Optionally, you can clear the selected file state here
-          
-        } else {
-            console.error('Failed to upload file.');
-        }
+      const response = await fetch("assets/images/", {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        console.log("File uploaded successfully.");
+        // Optionally, you can clear the selected file state here
+      } else {
+        console.error("Failed to upload file.");
+      }
     } catch (error) {
-        console.error('Error uploading file:', error);
+      console.error("Error uploading file:", error);
     }
-
-  }
+  };
 
   const typeValidator = (file) => {
     if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
@@ -240,27 +223,23 @@ const UploadSignature = () => {
   };
 
   const submitForm_123 = () => {
-    console.log(fileName); 
+    console.log(fileName);
     // if (fileName) {
-      embedImages(pdfLink,  `assets/images/${fileName}`);   
-  // }
-    
+    embedImages(pdfLink, `assets/images/${fileName}`);
+    // }
   };
   const submitForm = () => {
     if (writeName) {
       console.log(writeName);
 
-    modifyPdf(pdfLink, writeName);
-   
+      modifyPdf(pdfLink, writeName);
     }
   };
-  
 
   function onDocumentLoadSuccess({numPages}) {
     setNumPages(numPages);
   }
 
- 
   // const customStyles = `
   //   .react-pdf__Page__textContent {
   //     display: none !important;
@@ -278,7 +257,63 @@ const UploadSignature = () => {
         </div>
       </nav>
       <div className="container-fluid ">
-     
+        <Modal
+          open={showModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+               width:"40%",
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "8px",
+            }}
+          >
+            <div className="row border-bottom mb-5 ">
+              <div className="col-md-12 d-flex justify-content-between align-items-center">
+                <h5 id="modal-title">Take a Picture</h5>
+                <button
+                  className="btn btn-outline-dark rounded-circle"
+                  style={{position: "relative", top: "-6px"}}
+                  onClick={handleCloseModal}
+                >
+                 <CloseIcon />
+                  
+                </button>
+              </div>
+            </div>
+
+            <CapturePhoto />
+            {/* <div className="row mb-3">
+             
+              <div className="col-md-12 text-center">
+               
+                <img
+                  src="../assets/images/small/small-1.jpg"
+                  alt="Your Image"
+                  className="rounded-circle"
+                  style={{width: "200px", height: "200px"}}
+                />
+              </div>
+            </div>
+            <div className="row mt-5">
+              <div className="col-md-12 d-flex justify-content-center">
+                
+                <button className="btn btn-primary me-2">Retake</button>
+              
+                <button className="btn btn-success">Submit</button>
+              </div>
+            </div> */}
+          </Box>
+        </Modal>
+
         <section className="">
           <div className="card border-0">
             <div className="card-body">
@@ -299,100 +334,99 @@ const UploadSignature = () => {
                         </Tabs>
                       </Box>
                     </div>
-                   
-                      <div className={"card-body" + (value ==='1' ?" d-block": " d-none") }>
-                        <ul className="list-group list-group-flush">
-                          <li className="list-group-item">
-                            <label
-                              htmlFor="uploadSignature"
-                              className="form-label"
-                            >
-                              Upload Signature
-                            </label>
-                            <div className="image-upload-wrap ">
-                              <div {...getRootProps()}>
-                                <input
-                                  {...getInputProps()}
-                                  name="Uploadsign"
-                                  type="file"
-                                 
-                                />
-                                {isDragActive ? (
-                                  <h4 className="text-center">
-                                    <i>Drop the files</i>
-                                  </h4>
-                                ) : (
-                                  <h4 className="text-center">
-                                    <i> Drop down, or Select files</i>
-                                  </h4>
-                                )}
-                              </div>
-                            </div>
-                            <span className="text-danger ">{error}</span>
 
-                            <div className="d-flex justify-content-end align-content-center mt-2">
-                              {preview ? (
-                                <img
-                                  style={{border: "1px solid #000"}}
-                                  src={preview}
-                                  alt={preview}
-                                  width={150}
-                                  height={50}
-                                />
+                    <div
+                      className={
+                        "card-body" + (value === "1" ? " d-block" : " d-none")
+                      }
+                    >
+                      <ul className="list-group list-group-flush">
+                        <li className="list-group-item">
+                          <label
+                            htmlFor="uploadSignature"
+                            className="form-label"
+                          >
+                            Upload Signature
+                          </label>
+                          <div className="image-upload-wrap ">
+                            <div {...getRootProps()}>
+                              <input
+                                {...getInputProps()}
+                                name="Uploadsign"
+                                type="file"
+                              />
+                              {isDragActive ? (
+                                <h4 className="text-center">
+                                  <i>Drop the files</i>
+                                </h4>
                               ) : (
-                                ""
+                                <h4 className="text-center">
+                                  <i> Drop down, or Select files</i>
+                                </h4>
                               )}
                             </div>
-                          </li>
-                          
-                        </ul>
-                        <div className="mt-3">
-                          <button
-                            onClick={submitForm_123}
-                            className="btn btn-primary"
-                            name="btn"
-                          >
-                            Submit
-                          </button>
-                        </div>
-                      </div>
-                     
-                      <div className={"card-body" + (value === '2' ?" d-block": " d-none")}>
-                        <ul className="list-group list-group-flush">
-                          
-                          <li className="list-group-item">
-                            
-                         
-                            <div className="">
-                              <label
-                                htmlFor="writentype"
-                                className="form-label"
-                              >
-                                Enter Signature
-                              </label>
-                              <input
-                                type="text"
-                                name="writentype"
-                                onChange={(e) => handleChange(e.target.value)}
-                                id="writentype"
-                                placeholder="Enter Signature"
-                                className="form-control"
-                                required={(value==='2'?true:false)}
+                          </div>
+                          <span className="text-danger ">{error}</span>
+
+                          <div className="d-flex justify-content-end align-content-center mt-2">
+                            {preview ? (
+                              <img
+                                style={{border: "1px solid #000"}}
+                                src={preview}
+                                alt={preview}
+                                width={150}
+                                height={50}
                               />
-                            </div>
-                          </li>
-                        </ul>
-                        <div className="mt-3">
-                          <button
-                            onClick={submitForm}
-                            className="btn btn-primary"
-                            name="btn"
-                          >
-                            Submit
-                          </button>
-                        </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </li>
+                      </ul>
+                      <div className="mt-3 text-center">
+                        <button
+                          onClick={submitForm_123}
+                          className="btn btn-primary"
+                          name="btn"
+                        >
+                          Submit
+                        </button>
                       </div>
-                   
+                    </div>
+
+                    <div
+                      className={
+                        "card-body" + (value === "2" ? " d-block" : " d-none")
+                      }
+                    >
+                      <ul className="list-group list-group-flush">
+                        <li className="list-group-item">
+                          <div className="">
+                            <label htmlFor="writentype" className="form-label">
+                              Enter Signature
+                            </label>
+                            <input
+                              type="text"
+                              name="writentype"
+                              onChange={(e) => handleChange(e.target.value)}
+                              id="writentype"
+                              placeholder="Enter Signature"
+                              className="form-control"
+                              required={value === "2" ? true : false}
+                            />
+                          </div>
+                        </li>
+                      </ul>
+                      <div className="mt-3 text-center">
+                        <button
+                          onClick={submitForm}
+                          className="btn btn-primary"
+                          name="btn"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="col-md-9 col-lg-9 col-sm-12 col-xs-12 ">

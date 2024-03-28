@@ -6,26 +6,26 @@ const SelecteCoordinate = () => {
   const domContainerRef = React.useRef(null);
 
   useEffect(() => {
-    const response = await fetch('assets/uploads/file2.pdf');
-    const template = {
-      schemas: [], // Define your schema array here
-  basePdf: '', // Provide the base PDF file or URL
-  fileName: '',
-    };
+  //   const response =  fetch('assets/uploads/file2.pdf');
+  //   const template = {
+  //     schemas: [], // Define your schema array here
+  // basePdf: '', // Provide the base PDF file or URL
+  // fileName: '',
+  //   };
 
-    if (domContainerRef.current) {
+    // if (domContainerRef.current) {
       
 
-      const designer = new Designer({
-        domContainer: domContainerRef.current,
-        template,
-      });
+    //   const designer = new Designer({
+    //     domContainer: domContainerRef.current,
+    //     template,
+    //   });
 
-      return () => {
+      // return () => {
        
-        designer.destroy();
-      };
-    }
+      //   designer.destroy();
+      // };
+    // }
   }, []);
 
   return (

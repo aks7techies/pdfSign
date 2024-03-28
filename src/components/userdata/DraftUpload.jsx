@@ -2,7 +2,8 @@ import React from "react";
 import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import AddIcon from "@mui/icons-material/Add";
+
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import   {useNavigate}  from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,6 +14,7 @@ import Modal from "@mui/material/Modal";
 import {Formik, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {ToastContainer, toast} from "react-toastify";
+import './allpages.css';
 import "react-toastify/dist/ReactToastify.css";
 
 const style = {
@@ -89,15 +91,15 @@ const DraftUpload = () => {
           <ArrowBackIosNewIcon /> Back
         </a>
       </section>
-      <section className="container-fluid p-4">
-        <div className="card">
+      <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+        <div className="card w-100 border-0">
           <div className="card-header">
             <div className="row">
               <div className="d-flex justify-content-between">
                 <h3>Draft Documents List</h3>
                 <Button className="text-capitalize" onClick={handleOpen}>
                   {" "}
-                  <AddIcon /> Upload Document
+                  <CloudUploadIcon /> Upload Document
                 </Button>
                 <Modal
                   open={open}
@@ -276,7 +278,7 @@ const DraftUpload = () => {
             <div className="overflow-auto ">
               <table className="table table-hover">
                 <thead>
-                  <tr>
+                  <tr >
                     <th scope="col">#</th>
 
                     <th scope="col">Name</th>
