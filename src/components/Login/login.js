@@ -1,5 +1,5 @@
 import React from "react";
-import  {useNavigate}  from 'react-router-dom';
+import  {json, useNavigate}  from 'react-router-dom';
 import './login.css';
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function Login(){
+  
   const history = useNavigate();
 
   const initialValues = {
@@ -50,7 +51,10 @@ function Login(){
       }
     
       const data = await response.json();
-      console.log(data); // Log the response data
+      const jsonData = JSON.parse(JSON.stringify(data));
+      // console.log(jsonData.token.token); // Log the response data
+      sessionStorage.setItem("KeyId", jsonData.token.token);
+
     
       toast.success("Success Login!", {
         position: "top-right"

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from "react";
 import Modal from "@mui/material/Modal";
 
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import {useDropzone} from "react-dropzone";
 import "./uploadSignature.css";
 
@@ -252,8 +252,16 @@ const UploadSignature = () => {
   return (
     <>
       <nav className="navbar bg-background px-5 mb-4">
-        <div className="container-fluid">
-          <span className="navbar-brand mb-0 h1 text-light">PDFSigner</span>
+        <div className="container-fluid d-flex justify-content-between align-items-center">
+          <h1 className="navbar-brand mb-0 fs-2 text-light">PDFSigner</h1>
+          <div className="profile1 dropdown d-flex align-items-center">
+            <span className="px-2 fs-6 fw-bold text-white">Hi, Ananya Roy</span>
+            <img
+              className="dropbtn"
+              src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg"
+              alt="profile_picture"
+            />
+          </div>
         </div>
       </nav>
       <div className="container-fluid ">
@@ -270,7 +278,7 @@ const UploadSignature = () => {
         >
           <Box
             sx={{
-               width:"40%",
+              width: "50%",
               backgroundColor: "white",
               padding: "20px",
               borderRadius: "8px",
@@ -278,19 +286,19 @@ const UploadSignature = () => {
           >
             <div className="row border-bottom mb-5 ">
               <div className="col-md-12 d-flex justify-content-between align-items-center">
-                <h5 id="modal-title">Take a Picture</h5>
+                <h5 id="modal-title">Capture Your Picture</h5>
                 <button
                   className="btn btn-outline-dark rounded-circle"
                   style={{position: "relative", top: "-6px"}}
                   onClick={handleCloseModal}
                 >
-                 <CloseIcon />
-                  
+                  <CloseIcon />
                 </button>
               </div>
             </div>
 
             <CapturePhoto />
+
             {/* <div className="row mb-3">
              
               <div className="col-md-12 text-center">

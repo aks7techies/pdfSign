@@ -1,5 +1,6 @@
 import React from 'react';
 import Webcam from "react-webcam";
+
 const CapturePhoto = () => {
     const webcamRef = React.useRef(null);
     const [imgSrc, setImgSrc] = React.useState(null);
@@ -22,7 +23,7 @@ const CapturePhoto = () => {
       {imgSrc ? (
         <img src={imgSrc} alt="webcam" style={{ width: "100%", height: "auto" }} />
       ) : (
-        <Webcam height={300} width={300} ref={webcamRef} />
+      <Webcam  ref={webcamRef} style={{ width:"100%" }}/>
       )}
       <div className="btn-container">
         {imgSrc ? (

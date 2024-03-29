@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 // import HomeIcon from "@mui/icons-material/Home";
 import "./header.css";
+import {useNavigate} from "react-router-dom";
 // import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -8,9 +9,17 @@ import ButtonAction from "../../components/buttonaction/ButtonAction";
 
 function Header() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
+  };
+
+  const logOutfun = () => {
+    // Clear session storage
+    sessionStorage.removeItem("KeyId");
+    // Redirect the user to the home page or any other appropriate page
+    navigate("/");
   };
 
   return (
@@ -45,7 +54,7 @@ function Header() {
                   >
                     <BorderColorIcon /> Edit Profile
                   </a>
-                  <a href="#" className="fw-bold">
+                  <a href="#" className="fw-bold" onClick={logOutfun} >
                     <LogoutIcon /> Logout
                   </a>
                 </div>
@@ -176,7 +185,7 @@ function Header() {
               <a href="#" className="fw-bold text-white">
                 <BorderColorIcon /> Edit Profile
               </a>
-              <a href="#" className="fw-bold text-white">
+              <a href="#" onClick={logOutfun} className="fw-bold text-white">
                 <LogoutIcon /> Logout
               </a>
             </div>

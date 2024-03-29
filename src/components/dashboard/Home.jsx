@@ -1,21 +1,44 @@
-import * as React from "react";
+import  React, {useEffect} from "react";
 import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
 import {useNavigate} from "react-router-dom";
-
 import "./home.css";
 
 function Home() {
-  // const location = useLocation();
+  const [loader, setLoader]= React.useState(true);
   const navigate = useNavigate();
+ 
 
+  useEffect(() => {
+    const retrievedValue = sessionStorage.getItem('KeyId');
+
+    if (!retrievedValue) {
+      navigate('/'); // Redirect to home page if session is not set
+      // Show loading indicator
+    }
+    setTimeout(() => {
+      setLoader(false); // Hide loader after data is loaded
+    }, 100);
+    
+  }, [navigate]);
+  // const location = useLocation();
+ 
+  
   const handleNavigation = (route) => {
     navigate(route);
   };
 
   return (
-    <>
+    <div>
+      {loader ? (
+         <div className="loader-container d-flex justify-content-center align-items-center">
+             <img src="../../../assets/images/loader.gif" alt="Loading..." className="loader-image" />
+         </div>
+      ) : (<>
+
       <Header />
+
+   
 
       <section className="shifted container-fluid py-5 px-4 col-md-9 col-sm-12">
         <div className="row">
@@ -150,7 +173,10 @@ function Home() {
       </section>
 
       <Footer />
+      
     </>
+    )}
+    </div>
   );
 }
 
