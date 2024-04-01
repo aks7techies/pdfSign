@@ -1,15 +1,19 @@
 import React from "react";
-import  {json, useNavigate}  from 'react-router-dom';
+import  { useNavigate}  from 'react-router-dom';
 import './login.css';
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from "react-redux";
+import {fetchData} from '../../redux/slices/ProfileData';
+
 
 
 function Login(){
   
   const history = useNavigate();
+  const dispatch = useDispatch();
 
   const initialValues = {
     email: "",
@@ -26,6 +30,7 @@ function Login(){
   });
 
   const submitForm = async(values) => {
+  
     const url = "http://localhost:8000/api/user/login";
 
     try {
@@ -51,6 +56,8 @@ function Login(){
       }
     
       const data = await response.json();
+
+      dispatch(fetchData(data));
       const jsonData = JSON.parse(JSON.stringify(data));
       // console.log(jsonData.token.token); // Log the response data
       sessionStorage.setItem("KeyId", jsonData.token.token);
@@ -64,6 +71,7 @@ function Login(){
       history("/dashboard");
      }, 1000); // Properly navigate to the dashboard
     } catch (error) {
+     
       console.error("Error:", error);
     }
     

@@ -1,15 +1,41 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 // import HomeIcon from "@mui/icons-material/Home";
 import "./header.css";
 import {useNavigate} from "react-router-dom";
+import { useSelector } from "react-redux";
+
+
 // import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ButtonAction from "../../components/buttonaction/ButtonAction";
 
 function Header() {
-  const [sidebarVisible, setSidebarVisible] = useState(false);
-  const navigate = useNavigate();
+const [sidebarVisible, setSidebarVisible] = useState(false);
+const navigate = useNavigate();
+
+
+useEffect(() => {
+  const retrievedValue = sessionStorage.getItem('KeyId');
+
+  if (!retrievedValue) {
+    navigate('/'); // Redirect to home page if session is not set
+    // Show loading indicator
+  }
+  // setTimeout(() => {
+  //   setLoader(false); // Hide loader after data is loaded
+  // }, 100);
+  
+}, [navigate]);
+
+
+const getData = useSelector(state => state.profile.profileData);
+
+    // console.log(getData.data.user);
+    const name = getData.data.user.name;
+    const username = getData.data.user.username;
+
+
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
@@ -35,7 +61,7 @@ function Header() {
             <div className="">
               <div className="profile1 dropdown d-flex align-items-center">
                 <span className="px-2 fs-5 fw-bold text-white">
-                  Hi, Ananya Roy
+                  Hi, {name}
                 </span>
                 <img
                   className="dropbtn"
@@ -179,8 +205,8 @@ function Header() {
               src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg"
               alt="profile_picture"
             />
-            <h4>Anamika Roy</h4>
-            <p>Admin</p>
+            <h4>{name}</h4>
+            <p>{username}</p>
             <div className="drp-respons mb-2">
               <a href="#" className="fw-bold text-white">
                 <BorderColorIcon /> Edit Profile
