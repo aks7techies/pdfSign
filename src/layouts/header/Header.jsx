@@ -1,41 +1,48 @@
-import React, { useState,useEffect} from "react";
+import React, {useState, useEffect} from "react";
 // import HomeIcon from "@mui/icons-material/Home";
 import "./header.css";
-import {useNavigate} from "react-router-dom";
-import { useSelector } from "react-redux";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import SnippetFolderIcon from '@mui/icons-material/SnippetFolder';
 
 
 // import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import LogoutIcon from "@mui/icons-material/Logout";
-import ButtonAction from "../../components/buttonaction/ButtonAction";
+// import ButtonAction from "../../components/buttonaction/ButtonAction";
 
 function Header() {
-const [sidebarVisible, setSidebarVisible] = useState(false);
-const navigate = useNavigate();
-
-
-useEffect(() => {
-  const retrievedValue = sessionStorage.getItem('KeyId');
-
-  if (!retrievedValue) {
-    navigate('/'); // Redirect to home page if session is not set
-    // Show loading indicator
-  }
-  // setTimeout(() => {
-  //   setLoader(false); // Hide loader after data is loaded
-  // }, 100);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   
-}, [navigate]);
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  const handleNavigation = (route) => {
+    navigate(route);
+  };
 
-const getData = useSelector(state => state.profile.profileData);
+  useEffect(() => {
+    const retrievedValue = sessionStorage.getItem("KeyId");
 
-    // console.log(getData.data.user);
-    const name = getData.data.user.name;
-    const username = getData.data.user.username;
+    if (!retrievedValue) {
+      navigate("/"); // Redirect to home page if session is not set
+      // Show loading indicator
+    }
+    // setTimeout(() => {
+    //   setLoader(false); // Hide loader after data is loaded
+    // }, 100);
+  }, [navigate]);
 
+  const getData = useSelector((state) => state.profile.profileData);
 
+  // console.log(getData.data.user);
+  const name = getData.data.user.name;
+  const username = getData.data.user.username;
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
@@ -60,9 +67,7 @@ const getData = useSelector(state => state.profile.profileData);
           <div className="profile-ay">
             <div className="">
               <div className="profile1 dropdown d-flex align-items-center">
-                <span className="px-2 fs-5 fw-bold text-white">
-                  Hi, {name}
-                </span>
+                <span className="px-2 fs-5 fw-bold text-white">Hi, {name}</span>
                 <img
                   className="dropbtn"
                   src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg"
@@ -80,7 +85,7 @@ const getData = useSelector(state => state.profile.profileData);
                   >
                     <BorderColorIcon /> Edit Profile
                   </a>
-                  <a href="#" className="fw-bold" onClick={logOutfun} >
+                  <a href="#" className="fw-bold" onClick={logOutfun}>
                     <LogoutIcon /> Logout
                   </a>
                 </div>
@@ -148,7 +153,7 @@ const getData = useSelector(state => state.profile.profileData);
                     />
 
                     <button className="mt-3 btn btn-success">
-                    <BorderColorIcon />   Edit 
+                      <BorderColorIcon /> Edit
                     </button>
                   </div>
                 </div>
@@ -177,8 +182,6 @@ const getData = useSelector(state => state.profile.profileData);
                       <br />
                       <input type="number" placeholder="Enter your Number" />
                     </div> */}
-                   
-
                   </div>
                 </div>
               </div>
@@ -198,7 +201,46 @@ const getData = useSelector(state => state.profile.profileData);
           </div>
         </div>
         <div id="sidebar" className={sidebarVisible ? "visible" : ""}>
-          <ButtonAction />
+          {/* <ButtonAction /> */}
+
+          <section className=" ">
+            <Stack spacing={2} direction="column" className="sidepad py-2">
+              <ul>
+                <li
+                  className={location.pathname === "/dashboard" ? "active" : ""}
+                  onClick={() => handleNavigation("/dashboard")}
+                >
+                  <Button>
+                    <DashboardIcon /> Dashboard
+                  </Button>
+                </li>
+                <li
+                  className={location.pathname === "/clientmaster" ? "active" : ""}
+                  onClick={() => handleNavigation("/clientmaster")}
+                >
+                  <Button>
+                    <GroupAddIcon /> Client Master
+                  </Button>
+                </li>
+                <li
+                  className={location.pathname === "/templatemaster" ? "active" : ""}
+                  onClick={() => handleNavigation("/templatemaster")}
+                >
+                  <Button>
+                    <SnippetFolderIcon /> Template Master
+                  </Button>
+                </li>
+                <li
+                  className={location.pathname === "/Setting" ? "active" : ""}
+                  onClick={() => handleNavigation("/Setting")}
+                >
+                  <Button>
+                    <EngineeringIcon /> Settings
+                  </Button>
+                </li>
+              </ul>
+            </Stack>
+          </section>
 
           <div className="profile">
             <img
@@ -215,7 +257,9 @@ const getData = useSelector(state => state.profile.profileData);
                 <LogoutIcon /> Logout
               </a>
             </div>
-            <a className="text-dark " href="#">Privacy Police</a>
+            <a className="text-dark " href="#">
+              Privacy Police
+            </a>
           </div>
         </div>
 
