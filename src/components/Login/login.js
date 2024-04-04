@@ -1,14 +1,19 @@
 import React from "react";
-import  {useNavigate}  from 'react-router-dom';
+import  { useNavigate}  from 'react-router-dom';
 import './login.css';
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from "react-redux";
+import {fetchData} from '../../redux/slices/ProfileData';
+
 
 
 function Login(){
+  
   const history = useNavigate();
+  const dispatch = useDispatch();
 
   const initialValues = {
     email: "",
@@ -24,48 +29,52 @@ function Login(){
       .min(4, "Password is too short - should be 4 chars minimum"),
   });
 
-  const submitForm = async (values) => {
+  const submitForm = async(values) => {
+  
     const url = "http://localhost:8000/api/user/login";
 
-try {
-  const obj = {
-    username: values.email,
-    password: values.password,
-  };
+    try {
+      const obj = {
+        username: values.email,
+        password: values.password,
+      };
+    
+      const response = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+    
+      if (!response.ok) {
+        toast.error("Failed Login!", {
+          position: "top-right"
+        });
+        throw new Error("Failed to login");
+       
+      }
+    
+      const data = await response.json();
 
-  const response = await fetch(url, {
-    method: "POST",
-    body: JSON.stringify(obj),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
- 
-  if (!response.ok) {
-    throw new Error("Failed to login");
-  }
-
-  const data = await response.json();
-  // console.log(data.token); // Log the response data
-   window.sessionStorage.setItem('data',data.data.username);
-   window.sessionStorage.setItem('token',data.token.token);
-  toast.success(data.msg, {
-    position: "top-right"
-  });
-  setTimeout(()=>{
-    history("/dashboard");
-  },1000)
-  // Properly navigate to the dashboard
-} catch (error) {
-  console.error("Error:", error);
-}
+      dispatch(fetchData(data));
+      const jsonData = JSON.parse(JSON.stringify(data));
+      // console.log(jsonData.token.token); // Log the response data
+      sessionStorage.setItem("KeyId", jsonData.token.token);
 
     
-
-    // toast.success("Success Login !", {
-    //   position: "top-right"
-    // });
-    // history("/dashboard");
+      toast.success("Success Login!", {
+        position: "top-right"
+      });
+    
+     setTimeout(() => {
+      history("/dashboard");
+     }, 1000); // Properly navigate to the dashboard
+    } catch (error) {
+     
+      console.error("Error:", error);
+    }
+    
     // Add your form submission logic here
   };
 

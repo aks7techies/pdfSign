@@ -8,7 +8,7 @@ function Footer() {
 const Year = new Date().getFullYear();
   return (
     <>
-      <div className="container-fluid bg-color fixed-bottom">
+      <div className=" shifted container-fluid bg-color fixed-bottom">
         <footer className="d-flex flex-wrap justify-content-between align-items-center  my-4 ">
           <div className="col-md-4 d-flex align-items-center">
             <a

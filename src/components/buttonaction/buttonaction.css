@@ -1,3 +1,17 @@
-.shadow{
-    box-shadow: 0px 0px 0px 2px #f5f5f5b8;
+.MuiStack-root  button{
+
+    font-weight: bold;
+    color: #fff;
+}
+.MuiStack-root ul li:hover button{
+    color: #000;
+}
+.MuiStack-root ul li.active button{
+    color: #000;
+}
+ul{
+    list-style: none;
+}
+.sidepad{
+    padding: 0 0 0 12px;
 }
