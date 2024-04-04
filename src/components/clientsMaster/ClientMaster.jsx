@@ -44,8 +44,6 @@ const ClientMaster = () => {
     const signInSchema = Yup.object().shape({
       name: Yup.string().required("Name is required*"),
       email: Yup.string().email().required("Email is required*"),
-    
-       
     });
   
     const submitForm = (values) => {
@@ -56,13 +54,15 @@ const ClientMaster = () => {
       toast.success("Success Submitted !", {
         position: "top-right",
       });
-      redirect("/draft");
+      redirect("draft");
   
       // Add your form submission logic here
     };
   
     const confirmFunction = () => {};
-    const sendFunction = () =>{};
+    const sendFunction = () =>{
+      redirect("/clientMaster/draft");
+    };
 
   return (
     <div>
@@ -113,7 +113,7 @@ const ClientMaster = () => {
                             variant="h6"
                             component="h2"
                           >
-                            <h3>Add Document Upload</h3>
+                            <h3>Add Client</h3>
                           </Typography>
                           <hr />
                           <Typography id="modal-modal-description" sx={{mt: 2}}>

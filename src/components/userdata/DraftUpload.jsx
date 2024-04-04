@@ -2,9 +2,9 @@ import React from "react";
 import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import   {useNavigate}  from "react-router-dom";
+import {useNavigate}  from "react-router-dom";
+import ButtonAction from "../buttonaction/ButtonAction";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -74,7 +74,7 @@ const DraftUpload = () => {
     toast.success("Success Submitted !", {
       position: "top-right",
     });
-    redirect("/draft");
+    redirect("draft");
 
     // Add your form submission logic here
   };
@@ -92,6 +92,12 @@ const DraftUpload = () => {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+       
+       <div className="row">
+        <div className="col-md-2 col-sm-12 col-xl-2">
+         <ButtonAction />
+        </div>
+        <div className="col-md-10 col-sm-12 col-xl-10">
         <div className="card w-100 border-0">
           <div className="card-header">
             <div className="row">
@@ -383,6 +389,9 @@ const DraftUpload = () => {
             </div>
           </div>
         </div>
+        </div>
+       </div>
+        
       </section>
 
       <Footer />

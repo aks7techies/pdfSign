@@ -9,26 +9,22 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import SnippetFolderIcon from '@mui/icons-material/SnippetFolder';
-
-
-// import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import LogoutIcon from "@mui/icons-material/Logout";
-// import ButtonAction from "../../components/buttonaction/ButtonAction";
+
 
 function Header() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  // const [initialRoute, setInitialRoute] = useState("");
   
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleNavigation = (route) => {
-    navigate(route);
-  };
+ 
 
   useEffect(() => {
     const retrievedValue = sessionStorage.getItem("KeyId");
-
+   
     if (!retrievedValue) {
       navigate("/"); // Redirect to home page if session is not set
       // Show loading indicator
@@ -36,8 +32,11 @@ function Header() {
     // setTimeout(() => {
     //   setLoader(false); // Hide loader after data is loaded
     // }, 100);
-  }, [navigate]);
+  }, [location.pathname]);
 
+  const handleNavigation = (route) => {
+    navigate(route);
+  };
   const getData = useSelector((state) => state.profile.profileData);
 
   // console.log(getData.data.user);
@@ -215,8 +214,8 @@ function Header() {
                   </Button>
                 </li>
                 <li
-                  className={location.pathname === "/clientmaster" ? "active" : ""}
-                  onClick={() => handleNavigation("/clientmaster")}
+                  className={location.pathname === "/clientMaster" ? "active" : ""}
+                  onClick={() => handleNavigation("/clientMaster")}
                 >
                   <Button>
                     <GroupAddIcon /> Client Master

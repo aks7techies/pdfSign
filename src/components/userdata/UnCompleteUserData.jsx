@@ -4,6 +4,7 @@ import Footer from '../../layouts/footer/Footer';
 import Button from "@mui/material/Button";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import SendIcon from '@mui/icons-material/Send';
+import ButtonAction from "../buttonaction/ButtonAction";
 function UnCompleteUserData() {
 
   const reSendFunction =()=>{
@@ -19,6 +20,11 @@ function UnCompleteUserData() {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+      <div className="row">
+        <div className="col-md-2 col-sm-12 col-xl-2">
+         <ButtonAction />
+        </div>
+        <div className="col-md-10 col-sm-12 col-xl-10">
         <div className="card w-100 border-0">
           <div className="card-header">
             <div className="row">
@@ -201,6 +207,8 @@ function UnCompleteUserData() {
             </div>
           </div>
         </div>
+</div>
+</div>
       </section>
      <Footer />
     </>

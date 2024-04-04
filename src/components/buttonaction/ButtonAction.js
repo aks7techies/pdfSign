@@ -20,31 +20,31 @@ function ButtonAction() {
   };
 
   return (
-    <section className=" ">
-      <Stack spacing={2} direction="column" className="sidepad py-2">
+    <section className="buttonstyle ">
+      <Stack spacing={2} direction="column" className=" py-2">
         <ul>
 
-          <li className={location.pathname === "/draft" ? "active" : ""} onClick={() => handleNavigation("/draft")}>
+          <li className={location.pathname === "/clientMaster/draft" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/draft")}>
             <Button >
               <SaveAsIcon /> Draft
             </Button>
           </li>
-          <li className={location.pathname === "/complete" ? "active" : ""} onClick={() => handleNavigation("/complete")}>
+          <li className={location.pathname === "/clientMaster/complete" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/complete")}>
             <Button >
               <SettingsSuggestIcon /> Processed
             </Button>
           </li>
-          <li className={location.pathname === "/un-complete" ? "active" : ""} onClick={() => handleNavigation("/un-complete")}>
+          <li className={location.pathname === "/clientMaster/un-complete" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/un-complete")}>
             <Button >
               <ElectricBoltIcon /> Unprocessed
             </Button>
           </li>
-          <li className={location.pathname === "/verification" ? "active" : ""} onClick={() => handleNavigation("/verification")}>
+          <li className={location.pathname === "/clientMaster/verification" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/verification")}>
             <Button >
               <PlaylistAddCheckCircleIcon /> Verification
             </Button>
           </li>
-          <li className={location.pathname === "/archived" ? "active" : ""} onClick={() => handleNavigation("/archived")}>
+          <li className={location.pathname === "/clientMaster/archived" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/archived")}>
             <Button >
               <FileOpenIcon /> Archived
             </Button>

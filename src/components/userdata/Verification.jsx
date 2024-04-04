@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
+import ButtonAction from "../buttonaction/ButtonAction";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 const Verification = () => {
@@ -12,6 +13,11 @@ const Verification = () => {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+      <div className="row">
+        <div className="col-md-2 col-sm-12 col-xl-2">
+         <ButtonAction />
+        </div>
+        <div className="col-md-10 col-sm-12 col-xl-10">
         <div className="card w-100 border-0">
           <div className="card-header">
             <div className="row">
@@ -49,6 +55,8 @@ const Verification = () => {
               </table>
             </div>
           </div>
+        </div>
+        </div>
         </div>
       </section>
 

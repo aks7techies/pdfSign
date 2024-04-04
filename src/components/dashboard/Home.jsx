@@ -24,9 +24,7 @@ function Home() {
   // const location = useLocation();
  
   
-  const handleNavigation = (route) => {
-    navigate(route);
-  };
+  
 
   return (
     <div>
@@ -44,7 +42,7 @@ function Home() {
         <div className="row">
           <div
             className="col-md-3 col-sm-12 mb-3"
-            onClick={() => handleNavigation("/draft")}
+          
           >
             <div className="card text-white bg-info1">
               <div className="card-body">
@@ -69,7 +67,7 @@ function Home() {
           </div>
           <div
             className="col-md-3 col-sm-12 mb-3"
-            onClick={() => handleNavigation("/complete")}
+           
           >
             <div className="card text-white bg-info1">
               <div className="card-body">
@@ -94,7 +92,7 @@ function Home() {
           </div>
           <div
             className="col-md-3 col-sm-12 mb-3"
-            onClick={() => handleNavigation("/un-complete")}
+           
           >
             <div className="card text-white bg-info1">
               <div className="card-body">
@@ -120,7 +118,7 @@ function Home() {
 
           <div
             className="col-md-3 col-sm-12 mb-3"
-            onClick={() => handleNavigation("/verification")}
+           
           >
             <div className="card text-white bg-info1">
               <div className="card-body">
@@ -145,7 +143,7 @@ function Home() {
           </div>
           <div
             className="col-md-3 col-sm-12 mb-3"
-            onClick={() => handleNavigation("/archived")}
+           
           >
             <div className="card text-white bg-info1">
               <div className="card-body">

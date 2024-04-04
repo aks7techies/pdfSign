@@ -1,12 +1,13 @@
-.MuiStack-root  button{
+/* .MuiStack-root  button{
 
     font-weight: bold;
-    color: #fff;
+    color: #000000;
 }
-.MuiStack-root ul li:hover button{
+.MuiStack-root ul li:hover {
     color: #000;
 }
-.MuiStack-root ul li.active button{
+.MuiStack-root ul li.active {
+   
     color: #000;
 }
 ul{
@@ -14,4 +15,13 @@ ul{
 }
 .sidepad{
     padding: 0 0 0 12px;
+} */
+.buttonstyle{
+    padding: 0px 10px;
+    border-radius: 10px;
+    background-color: rgba(218, 239, 255, 0.838);
+    border: 1px solid #0075a3;
+}
+.buttonstyle ul li button{
+    color: #000;
 }
