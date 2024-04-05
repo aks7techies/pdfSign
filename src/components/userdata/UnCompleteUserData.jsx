@@ -1,40 +1,37 @@
-import React from 'react'
-import Header from '../../layouts/header/Header'
-import Footer from '../../layouts/footer/Footer';
+import React from "react";
+import Header from "../../layouts/header/Header";
+import Footer from "../../layouts/footer/Footer";
 import Button from "@mui/material/Button";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 import ButtonAction from "../buttonaction/ButtonAction";
+import UserHeaderTop from "../userheadertop/UserHeaderTop";
 function UnCompleteUserData() {
-
-  const reSendFunction =()=>{
-
-  }
+  const reSendFunction = () => {};
 
   return (
     <>
-     <Header />
-     <section className="container-fluid px-4 pt-3">
+      <Header />
+      <section className="container-fluid px-4 pt-3">
         <a role="button" className="btn btn-dark" href="/dashboard">
           <ArrowBackIosNewIcon /> Back
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
-      <div className="row">
-        <div className="col-md-2 col-sm-12 col-xl-2">
-         <ButtonAction />
-        </div>
-        <div className="col-md-10 col-sm-12 col-xl-10">
-        <div className="card w-100 border-0">
-          <div className="card-header">
-            <div className="row">
-              <div className="d-flex justify-content-between">
-                <h3>Unprocessed  Documents List</h3>
-                {/* <Button onClick={handleOpen}>
+        <UserHeaderTop />
+        <div className="row">
+         
+          <div className="col-md-9 col-sm-12 col-xl-9">
+            <div className="card w-100 border-0">
+              <div className="card-header">
+                <div className="row">
+                  <div className="d-flex justify-content-between">
+                    <h3>Unprocessed List</h3>
+                    {/* <Button onClick={handleOpen}>
                   {" "}
                   <AddIcon /> Add User
                 </Button> */}
-                {/* <Modal
+                    {/* <Modal
                   open={open}
                   onClose={handleClose}
                   aria-labelledby="modal-modal-title"
@@ -166,53 +163,61 @@ function UnCompleteUserData() {
                      </Formik>
                   </Box>
                 </Modal> */}
+                  </div>
+                </div>
+              </div>
+              <div className="card-body">
+                <div className="overflow-auto">
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Document Name</th>
+                        <th scope="col">Date Time</th>
+                        <th scope="col">Orginal Document</th>
+                        <th scope="col">Date Time</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>@mdo</td>
+                        <td>
+                          {new Date().toLocaleDateString()} <br />
+                          {new Date().toLocaleTimeString()}{" "}
+                        </td>
+                        <td>
+                          <a href="/"> View </a>
+                        </td>
+                        <td>
+                          {new Date().toLocaleDateString()} <br />
+                          {new Date().toLocaleTimeString()}{" "}
+                        </td>
+                        <td>
+                          <Button
+                            className="text-capitalize"
+                            onClick={reSendFunction}
+                            title="Resend"
+                          >
+                            <SendIcon className="text-warning" />
+                          </Button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-          <div className="card-body">
-            <div className='overflow-auto'>
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Date Time</th>
-                    <th scope="col">Document Name</th>
-                    <th scope="col">Orginal Document</th> 
-                    <th scope="col">Date Time</th> 
-                    <th scope="col">Action</th>
-                  
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                   <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto1@gmail.com</td>
-                    <td>{new Date().toLocaleDateString()} <br />{new Date().toLocaleTimeString()} </td>
-                    <td>@mdo</td>
-                    <td><a href="/"> View </a></td>
-                    <td>{new Date().toLocaleDateString()} <br />{new Date().toLocaleTimeString()} </td>
-                    <td>
-                    <Button className="text-capitalize" onClick={reSendFunction} title='Resend'>
-                    <SendIcon className='text-warning' />
-                   </Button>
-                    </td>
-
-                </tr>
-                
-              </tbody>
-            </table>
-            </div>
+          <div className="col-md-3 col-sm-12 col-xl-3" >
+            <ButtonAction />
           </div>
         </div>
-</div>
-</div>
       </section>
-     <Footer />
+      <Footer />
     </>
-  )
+  );
 }
 
-export default UnCompleteUserData
+export default UnCompleteUserData;

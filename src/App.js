@@ -34,6 +34,11 @@ const ClientMaster = React.lazy(() =>
 const TemplateMaster = React.lazy(() =>
   import("./components/templateMater/TemplateMaster")
 );
+const HistoryMaster = React.lazy(() =>
+  import("./components/history/HistoryActivity")
+);
+
+
 const Page404 = React.lazy(() => import("./components/pages/page404/Page404"));
 const Page500 = React.lazy(() => import("./components/pages/page500/Page500"));
 function App() {
@@ -43,6 +48,7 @@ function App() {
         <Routes>
           <Route exact path="/" name="Login Page" element={<Login />} />
           <Route exact path="/dashboard" name="Dashboard" element={<Home />} />
+          
            <Route path="/clientMaster" >
             <Route index={true}  element={<ClientMaster />} />
             <Route path="complete" element={<AllUserData />} />
@@ -50,6 +56,7 @@ function App() {
             <Route path="un-complete" element={<UnCompleteData />} />
             <Route path="verification" element={<Verification />} />
             <Route path="archived" element={<Archived />} />
+            <Route  path="historyActivity" name="History" element={<HistoryMaster />} />
           </Route>
 
           <Route

@@ -59,7 +59,7 @@ const ClientMaster = () => {
       // Add your form submission logic here
     };
   
-    const confirmFunction = () => {};
+    
     const sendFunction = () =>{
       redirect("/clientMaster/draft");
     };
@@ -219,13 +219,7 @@ const ClientMaster = () => {
                     {new Date().toLocaleTimeString()}
                     </td>
                     <td>
-                      <Button
-                        className="text-capitalize"
-                        onClick={confirmFunction}
-                        title="Delete Client"
-                      >
-                        <DeleteIcon className="text-danger" />
-                      </Button>
+                     
                       <Button
                         className="text-capitalize"
                         onClick={sendFunction}
@@ -242,9 +236,6 @@ const ClientMaster = () => {
           </div>
         </div>
       </section>
-
-
-
       <Footer />
     </div>
   );

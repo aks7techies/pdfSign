@@ -1,11 +1,10 @@
 import React from "react";
 import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
-import ButtonAction from "../buttonaction/ButtonAction";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import UserHeaderTop from "../userheadertop/UserHeaderTop";
-const Verification = () => {
+import ButtonAction from "../buttonaction/ButtonAction";
+const HistoryActivity = () => {
   return (
     <>
       <Header />
@@ -17,13 +16,12 @@ const Verification = () => {
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
         <UserHeaderTop />
         <div className="row">
-          
           <div className="col-md-9 col-sm-12 col-xl-9">
             <div className="card w-100 border-0">
               <div className="card-header">
                 <div className="row">
                   <div className="d-flex justify-content-between">
-                    <h3>Verification  List</h3>
+                    <h3>History Details</h3>
                   </div>
                 </div>
               </div>
@@ -33,26 +31,23 @@ const Verification = () => {
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                       
-                       
-                        <th scope="col">Images</th>
-                        <th scope="col">Date Time</th>
-                        <th scope="col">Action</th>
 
+                        <th scope="col"> Activity </th>
+                        <th scope="col">Desciption </th>
+                        <th scope="col">Date Time</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto1@gmail.com</td>
                         <td>
-                          <a href="/">
-                            <DownloadForOfflineIcon color="success" />
-                          </a>
+                          {new Date().toLocaleDateString()}
+                          <br />
+                          {new Date().toLocaleTimeString()}
                         </td>
-                        <td>
-                          {new Date().toLocaleDateString()} <br />
-                          {new Date().toLocaleTimeString()}{" "}
-                        </td>
+                        <td></td>
                       </tr>
                     </tbody>
                   </table>
@@ -60,7 +55,7 @@ const Verification = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-3 col-sm-12 col-xl-3" >
+          <div className="col-md-3 col-sm-12 col-xl-3">
             <ButtonAction />
           </div>
         </div>
@@ -71,4 +66,4 @@ const Verification = () => {
   );
 };
 
-export default Verification;
+export default HistoryActivity;

@@ -68,7 +68,7 @@ function Login(){
       });
     
      setTimeout(() => {
-      history("/dashboard");
+      history("/clientMaster");
      }, 1000); // Properly navigate to the dashboard
     } catch (error) {
      
