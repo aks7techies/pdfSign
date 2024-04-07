@@ -135,7 +135,7 @@ const TemplateMaster = () => {
                                   htmlFor="documentname"
                                   className="form-label mb-0"
                                 >
-                                  Document Name{" "}
+                                  Template Name{" "}
                                   <span className="text-danger">*</span>
                                 </label>
                                 <Field
@@ -163,7 +163,7 @@ const TemplateMaster = () => {
                                   htmlFor="uploadDocument"
                                   className="form-label mb-0"
                                 >
-                                  Upload Document
+                                  Upload Template Document
                                   <span className="text-danger">*</span>
                                 </label>
                                 <input
