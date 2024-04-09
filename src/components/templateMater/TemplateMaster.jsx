@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -8,12 +8,16 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
-// import SendIcon from '@mui/icons-material/Send';
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+
+import axios from "axios";
 import Modal from "@mui/material/Modal";
 import {Formik, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
 import {ToastContainer, toast} from "react-toastify";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import './templateStyle.css';
 import "react-toastify/dist/ReactToastify.css";
 const style = {
     position: "absolute",
@@ -30,10 +34,17 @@ const TemplateMaster = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [gettoken, setGettoken] = React.useState(null);
+  const [templateDetails, setTemplatesDetails] = React.useState([]);
+  const [loader, setLoader] = React.useState(true);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
 
   const redirect = useNavigate();
  
-
+  useEffect(() => {
+    fetchData();
+  }, [redirect, gettoken]);
   const initialValues = {
     documentname: "",
     uploadDocument: "",
@@ -59,24 +70,96 @@ const TemplateMaster = () => {
         }
       ),
   });
+  const fetchData = async () => {
+    const retrievedValue = sessionStorage.getItem("KeyId");
+    if (!retrievedValue) {
+      redirect("/"); // Redirect to home page if session is not set
+      // Show loading indicator
+      return;
+    }
+    setGettoken(retrievedValue);
+    setTimeout(() => {
+      setLoader(false); // Hide loader after data is loaded
+    }, 100);
 
-  const submitForm = (values) => {
+    if (gettoken !== null) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/template?token=${gettoken}`
+        );
+
+        const obj = JSON.parse(JSON.stringify(response));
+
+        if (obj.status == 200) {
+          setTemplatesDetails(obj.data.data);
+        } else {
+          toast.danger(obj.msg, {
+            position: "top-right",
+          });
+        }
+      } catch (error) {
+        // toast.danger( error.ErrorMessage, {
+        //   position: "top-right",
+        // });
+        console.error(error);
+      }
+    }
+  };
+  const submitForm = async(values) => {
     console.log(values);
-    // e.stopPropagation();
+    try {
+      const response = await axios.post("http://localhost:8000/api/template", {
+        documentName: values.documentname,
+        document: values.uploadDocument.name,
+        token: gettoken,
+      });
 
-    setOpen(false);
-    toast.success("Success Submitted !", {
-      position: "top-right",
-    });
-    redirect("/draft");
+      const objJson = JSON.parse(JSON.stringify(response));
 
-    // Add your form submission logic here
+      if (objJson.status === 201) {
+        setOpen(false);
+        toast.success(objJson.data.msg, {
+          position: "top-right",
+        });
+        fetchData();
+      } else {
+        toast.danger(objJson.msg, {
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      toast.danger(error.ErrorMessage, {
+        position: "top-right",
+      });
+      redirect("/");
+      console.error("Error submitting form:", error);
+    }
+
   };
 
   const confirmFunction = () => {};
+
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = templateDetails.slice(indexOfFirstItem, indexOfLastItem);
   // const sendFunction = () =>{};
 
-    return (<div>
+    return (
+    <>
+     {loader ? (
+        <div className="loader-container d-flex justify-content-center align-items-center">
+          <img
+            src="../../../assets/images/loader.gif"
+            alt="Loading..."
+            className="loader-image"
+          />
+        </div>
+      ) : (
+    <div>
      <Header />
       <ToastContainer />
        
@@ -217,7 +300,7 @@ const TemplateMaster = () => {
             </div>
           </div>
           <div className="card-body">
-            <div className="overflow-auto ">
+            <div className="overflow-auto mostly-customized-scrollbar">
               <table className="table table-hover">
                 <thead>
                   <tr >
@@ -230,13 +313,21 @@ const TemplateMaster = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto1@gmail.com</td>
-                    <td>{new Date().toLocaleDateString()}
-                    <br />
-                    {new Date().toLocaleTimeString()}
+
+                {templateDetails &&
+                        currentItems.map((item, index) => (
+                 <tr key={item._id}>
+                 <td scope="row">{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                    <td>{item.documentName}</td>
+                    <td>
+                      <a href="#">
+                         <DownloadForOfflineIcon color="success" />
+                      </a>
+                    </td>
+                    <td>
+                      {new Date(item.createdAt).toLocaleDateString()}
+                      <br />
+                      {new Date(item.createdAt).toLocaleTimeString()}
                     </td>
                     <td>
                       <Button
@@ -246,17 +337,23 @@ const TemplateMaster = () => {
                       >
                         <DeleteIcon className="text-danger" />
                       </Button>
-                      {/* <Button
-                        className="text-capitalize"
-                        onClick={sendFunction}
-                        title="Send Client"
-                      >
-                        <SendIcon className="text-success"  />
-                      </Button> */}
+                     
                     </td>
                   </tr>
+                 ))}
+
                  
                 </tbody>
+                {templateDetails && templateDetails.length > 0 && (
+                    <Stack spacing={1} justifyContent="center">
+                      <Pagination
+                        count={Math.ceil(templateDetails.length / itemsPerPage)}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        color="primary"
+                      />
+                    </Stack>
+                  )}
               </table>
             </div>
           </div>
@@ -264,7 +361,10 @@ const TemplateMaster = () => {
       </section>
       <Footer />
 
-    </div>);
+    </div>
+      )}
+    </>
+    );
 }
 
 export default TemplateMaster;

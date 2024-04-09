@@ -19,8 +19,8 @@ ul{
 .buttonstyle{
     padding: 0px 10px;
     border-radius: 10px;
-    background-color: rgb(117 176 235);
-    border: 1px solid #0075a3;
+    /* background-color: rgb(117 176 235); */
+    /* border: 1px solid #0075a3; */
 }
 .buttonstyle ul li button{
     color: #000;

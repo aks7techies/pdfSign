@@ -1,0 +1,15 @@
+.mostly-customized-scrollbar{
+    max-height: 50vh;
+}
+.mostly-customized-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #aaa; /* or add it to the track */
+  }
+  .mostly-customized-scrollbar::-webkit-scrollbar-thumb {
+    background: #64a3df;
+  }
+
+  .MuiPagination-ul li button {
+    background: #000;
+}

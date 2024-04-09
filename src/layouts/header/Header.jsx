@@ -33,7 +33,7 @@ function Header() {
     // setTimeout(() => {
     //   setLoader(false); // Hide loader after data is loaded
     // }, 100);
-  }, [location.pathname]);
+  }, [navigate]);
 
   const handleNavigation = (route) => {
     navigate(route);
@@ -77,8 +77,7 @@ function Header() {
                   {/* <a href="#" className="fw-bold">
                     <AccountCircleIcon /> Profile
                   </a> */}
-                  <a
-                    href="#"
+                  <a href="#"
                     className="fw-bold"
                     data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"

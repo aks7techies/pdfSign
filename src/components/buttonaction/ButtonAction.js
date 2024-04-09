@@ -20,32 +20,32 @@ function ButtonAction() {
   };
 
   return (
-    <section className="buttonstyle " style={{width: "85%"}}>
-      <Stack spacing={2} direction="column" className=" py-2">
-        <ul>
+    <section className="buttonstyle mb-2" style={{width: "97%"}}>
+      <Stack spacing={2} direction="row" className="">
+        <ul className="d-flex">
 
-          <li className={location.pathname === "/clientMaster/draft" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/draft")}>
-            <Button >
+          <li >
+            <Button className={location.pathname === "/clientMaster/draft" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/draft")}>
               <SaveAsIcon /> Draft <span style={{ backgroundColor:"#0075a3" }} className=" ms-1 p-1 text-light rounded-circle"> 0</span>
             </Button>
           </li>
-          <li className={location.pathname === "/clientMaster/complete" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/complete")}>
-            <Button >
+          <li >
+            <Button className={location.pathname === "/clientMaster/complete" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/complete")}>
               <SettingsSuggestIcon /> Processed <span style={{ backgroundColor:"#0075a3" }} className=" ms-1 p-1 text-light rounded-circle"> 0</span>
             </Button>
           </li>
-          <li className={location.pathname === "/clientMaster/un-complete" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/un-complete")}>
-            <Button >
+          <li >
+            <Button className={location.pathname === "/clientMaster/un-complete" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/un-complete")}>
               <ElectricBoltIcon /> Unprocessed <span style={{ backgroundColor:"#0075a3" }} className=" ms-1 p-1 text-light rounded-circle"> 0</span>
             </Button>
           </li>
-          <li className={location.pathname === "/clientMaster/verification" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/verification")}>
-            <Button >
+          <li >
+            <Button className={location.pathname === "/clientMaster/verification" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/verification")}>
               <PlaylistAddCheckCircleIcon /> Verification <span style={{ backgroundColor:"#0075a3" }} className=" ms-1 p-1 text-light rounded-circle"> 0</span>
             </Button>
           </li>
-          <li className={location.pathname === "/clientMaster/archived" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/archived")}>
-            <Button >
+          <li >
+            <Button className={location.pathname === "/clientMaster/archived" ? "active" : ""} onClick={() => handleNavigation("/clientMaster/archived")}>
               <FileOpenIcon /> Archived <span style={{ backgroundColor:"#0075a3" }} className=" ms-1 p-1 text-light rounded-circle"> 0</span>
             </Button>
           </li>
