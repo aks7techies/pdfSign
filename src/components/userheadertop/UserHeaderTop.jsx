@@ -5,7 +5,7 @@ const UserHeaderTop = () => {
       <nav className="navbar navbar-expand-lg  mb-2 " style={{ backgroundColor:" rgb(117 176 235)",width: "97%" }}>
         <div className="container-fluid">
            
-          <a className="navbar-brand " href="#">
+          <a className="navbar-brand text-white " href="#">
           Client Name:  Mark
           </a>
           {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

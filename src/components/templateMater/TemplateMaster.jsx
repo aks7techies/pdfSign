@@ -106,13 +106,20 @@ const TemplateMaster = () => {
     }
   };
   const submitForm = async(values) => {
-    console.log(values);
+    // console.log(values);
+    const formData = new FormData();
+    formData.append('documentName', values.documentname);
+    formData.append('document', values.uploadDocument);
+    formData.append('token', gettoken);
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    
+
     try {
-      const response = await axios.post("http://localhost:8000/api/template", {
-        documentName: values.documentname,
-        document: values.uploadDocument.name,
-        token: gettoken,
-      });
+      const response = await axios.post("http://localhost:8000/api/template", formData, config);
 
       const objJson = JSON.parse(JSON.stringify(response));
 

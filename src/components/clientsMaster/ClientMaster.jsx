@@ -60,7 +60,7 @@ const ClientMaster = () => {
 
         const obj = JSON.parse(JSON.stringify(response));
 
-        if (obj.status == 200) {
+        if (obj.status === 200) {
           setClientsDetails(obj.data.data);
         } else {
           toast.danger(obj.msg, {
@@ -118,8 +118,10 @@ const ClientMaster = () => {
       console.error("Error submitting form:", error);
     }
   };
-  const sendFunction = () => {
-    redirect("/clientMaster/draft");
+  const sendFunction = (value) => {
+    // console.log(value);
+   const base64Encoded = btoa(value);
+    redirect(`/clientMaster/draft/${base64Encoded}`);
   };
 
   const handlePageChange = (event, page) => {

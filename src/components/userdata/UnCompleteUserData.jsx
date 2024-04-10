@@ -6,8 +6,65 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import SendIcon from "@mui/icons-material/Send";
 import ButtonAction from "../buttonaction/ButtonAction";
 import UserHeaderTop from "../userheadertop/UserHeaderTop";
-function UnCompleteUserData() {
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import  {useNavigate, useParams}  from 'react-router-dom';
+import axios from "axios";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+const UnCompleteUserData = () => {
+  const clientEncode = useParams();
+  const clientIdBase64Decode = atob(clientEncode.clientId);
+  const [gettoken, setGettoken] = React.useState(null);
+  const redirect = useNavigate();
+  const [unCompleteDetails, setUnCompleteDetails] = React.useState([]);
+  const [loader, setLoader] = React.useState(true);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
+
+  React.useEffect(() => {
+    fetchData();
+  }, [redirect, gettoken]);
+
+  const fetchData = async () => {
+   
+    const retrievedValue = sessionStorage.getItem("KeyId");
+    if (!retrievedValue) {
+      redirect("/"); // Redirect to home page if session is not set
+      // Show loading indicator
+      return;
+    }
+    setGettoken(retrievedValue);
+    setTimeout(() => {
+      setLoader(false); // Hide loader after data is loaded
+    }, 100);
+
+    if (gettoken !== null) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/users/unComplete?clientId=${clientIdBase64Decode}&token=${gettoken}`
+        );
+        const obj = JSON.parse(JSON.stringify(response));
+
+        if (obj.status === 200) {
+          setUnCompleteDetails(obj.data.data);
+        } else {
+          // console.log(obj.data.msg);
+          toast.danger(obj.data.msg, {
+            position: "top-right",
+          });
+        }
+      } catch (error) {
+        const err = JSON.parse(JSON.stringify(error));
+        console.log(err.message);
+      }
+    }
+  };
+
+
   const reSendFunction = () => {};
+
+
 
   return (
     <>
@@ -18,151 +75,16 @@ function UnCompleteUserData() {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+        <ButtonAction  headers={clientEncode.clientId}/>
         <UserHeaderTop />
         <div className="row">
          
-          <div className="col-md-9 col-sm-12 col-xl-9">
+          <div className="col-md-11 col-sm-12 col-xl-11">
             <div className="card w-100 border-0">
               <div className="card-header">
                 <div className="row">
                   <div className="d-flex justify-content-between">
                     <h3>Unprocessed List</h3>
-                    {/* <Button onClick={handleOpen}>
-                  {" "}
-                  <AddIcon /> Add User
-                </Button> */}
-                    {/* <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Box sx={style}>
-                  <Formik
-                        initialValues={initialValues}
-                        validationSchema={signInSchema}
-                        onSubmit={submitForm}
-                      >
-                        {({
-                          values,
-                          handleChange,
-                          handleSubmit,
-                          errors,
-                          touched,
-                          handleBlur,
-                          isValid,
-                          dirty,
-                        }) => (
-                          <form onSubmit={handleSubmit}>
-                      <Typography
-                        id="modal-modal-title"
-                        variant="h6"
-                        component="h2"
-                      >
-                        <h3>Add Document Upload</h3>
-                      </Typography>
-                      <hr />
-                      <Typography id="modal-modal-description" sx={{mt: 2}}>
-                        <div className="row">
-                          
-                          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-3">
-                            <label htmlFor="name" className="form-label mb-0">
-                              Name<span className="text-danger">*</span>
-                            </label>
-                            <Field
-                              type="text"
-                              value={values.name}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className={"form-control" +  (errors.name && touched.name
-                                ? " input-error"
-                                : "")}
-                              name="name"
-                              id="name"
-                            />
-                             <ErrorMessage
-                                name="name"
-                                component="span"
-                                className="error text-danger"
-                              />
-                          </div>
-                          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-3">
-                            <label htmlFor="email" className="form-label mb-0">
-                              Email<span className="text-danger">*</span>
-                            </label>
-                            <Field
-                              type="email"
-                              value={values.email}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className={"form-control"+  (errors.email && touched.email
-                                ? " input-error"
-                                : "")}
-                              name="email"
-                              id="email"
-                            />
-                            <ErrorMessage
-                                name="email"
-                                component="span"
-                                className="error text-danger"
-                              />
-                          </div>
-                          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-3">
-                            <label htmlFor="documentname" className="form-label mb-0">
-                               Document Name <span className="text-danger">*</span>
-                            </label>
-                            <Field
-                              type="text"
-                              value={values.documentname}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                              className={"form-control" +  (errors.documentname && touched.documentname
-                                ? " input-error"
-                                : "")}
-                              name="documentname"
-                              id="documentname"
-                            />
-                            <ErrorMessage
-                                name="documentname"
-                                component="span"
-                                className="error text-danger"
-                              />
-                          </div>
-                          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-3">
-                            <label
-                              htmlFor="uploadDocument"
-                              className="form-label mb-0"
-                            >
-                              Upload Document<span className="text-danger">*</span>
-                            </label>
-                            <Field
-                              type="file"
-                                value={values.uploadDocument}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                accept='.pdf'
-                                className={"form-control" +   (errors.uploadDocument && touched.uploadDocument
-                                ? " input-error"
-                                : "")}
-                              name="uploadDocument"
-                              id="uploadDocument"
-                            />
-                            <ErrorMessage
-                                name="uploadDocument"
-                                component="span"
-                                className="error text-danger"
-                              />
-                          </div>
-                          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-3">
-                            <button className={ "btn btn-primary" + (dirty && isValid ? "" : " disabled-btn") } onClick={submitForm} disabled={!(dirty && isValid)}> Submit</button>
-                          </div>
-                        </div>
-                      </Typography>
-                    </form>
-                     )}
-                     </Formik>
-                  </Box>
-                </Modal> */}
                   </div>
                 </div>
               </div>
@@ -204,15 +126,15 @@ function UnCompleteUserData() {
                           </Button>
                         </td>
                       </tr>
+                      {}
                     </tbody>
+
                   </table>
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-md-3 col-sm-12 col-xl-3" >
-            <ButtonAction />
-          </div>
+          
         </div>
       </section>
       <Footer />

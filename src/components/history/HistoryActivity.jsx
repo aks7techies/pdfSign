@@ -14,9 +14,10 @@ const HistoryActivity = () => {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+        <ButtonAction />
         <UserHeaderTop />
         <div className="row">
-          <div className="col-md-9 col-sm-12 col-xl-9">
+          <div className="col-md-11 col-sm-12 col-xl-11">
             <div className="card w-100 border-0">
               <div className="card-header">
                 <div className="row">
@@ -54,9 +55,6 @@ const HistoryActivity = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="col-md-3 col-sm-12 col-xl-3">
-            <ButtonAction />
           </div>
         </div>
       </section>

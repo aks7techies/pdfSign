@@ -4,7 +4,7 @@ import Footer from "../../layouts/footer/Footer";
 import ButtonAction from "../buttonaction/ButtonAction";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 // import AddIcon from "@mui/icons-material/Add";
-// import  {useNavigate}  from 'react-router-dom';
+import  {useParams}  from 'react-router-dom';
 // import Box from "@mui/material/Box";
 // import Button from "@mui/material/Button";
 // import Typography from "@mui/material/Typography";
@@ -16,10 +16,13 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import "react-toastify/dist/ReactToastify.css";
 import UserHeaderTop from "../userheadertop/UserHeaderTop";
 
+
 function UserData() {
   // const confirmFunction = ()=>{
 
   // }
+  const clientEncode = useParams();
+  const clientIdBase64Decode = atob(clientEncode.clientId);
 
   return (
     <>
@@ -31,10 +34,11 @@ function UserData() {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+         <ButtonAction  headers={clientEncode.clientId} />  
         <UserHeaderTop />
         <div className="row">
           
-          <div className="col-md-9 col-sm-12 col-xl-9">
+          <div className="col-md-11 col-sm-12 col-xl-11">
             <div className="card w-100 border-0">
               <div className="card-header">
                 <div className="row">
@@ -84,9 +88,7 @@ function UserData() {
               </div>
             </div>
           </div>
-          <div className="col-md-3 col-sm-12 col-xl-3" >
-            <ButtonAction />
-          </div>
+          
         </div>
       </section>
 

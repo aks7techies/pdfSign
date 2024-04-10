@@ -4,8 +4,11 @@ import Footer from "../../layouts/footer/Footer";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import ButtonAction from "../buttonaction/ButtonAction";
+import  {useParams}  from 'react-router-dom';
 import UserHeaderTop from '../userheadertop/UserHeaderTop';
 const Archived = () => {
+  const clientEncode = useParams();
+  const clientIdBase64Decode = atob(clientEncode.clientId);
     return (<>
    <Header />
    <section className="container-fluid px-4 pt-3">
@@ -14,10 +17,11 @@ const Archived = () => {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
+        <ButtonAction headers={clientEncode.clientId} />
         <UserHeaderTop />
       <div className="row">
        
-        <div className="col-md-9 col-sm-12 col-xl-9">
+        <div className="col-md-11 col-sm-12 col-xl-11">
         <div className="card w-100 border-0">
           <div className="card-header">
             <div className="row">
@@ -54,9 +58,7 @@ const Archived = () => {
           </div>
         </div>
         </div>
-        <div className="col-md-3 col-sm-12 col-xl-3">
-         <ButtonAction />
-        </div>
+        
         </div>
       </section>
    <Footer />
