@@ -12,4 +12,8 @@
 
   .MuiPagination-ul li button {
     background: #000;
+
+}
+.MuiPagination-ul{
+    flex-wrap: unset !important;
 }

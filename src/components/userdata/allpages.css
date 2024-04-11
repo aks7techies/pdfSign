@@ -4,7 +4,7 @@
 }
 
 .mostly-customized-scrollbar{
-    max-height: 50vh;
+    max-height: 40vh;
 }
 .mostly-customized-scrollbar::-webkit-scrollbar {
     width: 5px;
@@ -17,4 +17,7 @@
 
   .MuiPagination-ul li button {
     background: #000;
+}
+.MuiPagination-ul{
+  flex-wrap: unset !important;
 }

@@ -4,11 +4,12 @@ import Footer from "../../layouts/footer/Footer";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 import ButtonAction from "../buttonaction/ButtonAction";
-import  {useParams}  from 'react-router-dom';
 import UserHeaderTop from '../userheadertop/UserHeaderTop';
+import {useSelector, useDispatch } from 'react-redux';
 const Archived = () => {
-  const clientEncode = useParams();
-  const clientIdBase64Decode = atob(clientEncode.clientId);
+ 
+  const clientIdBase64Decode = useSelector((state)=>state.client.value);
+  console.log(clientIdBase64Decode);
     return (<>
    <Header />
    <section className="container-fluid px-4 pt-3">
@@ -17,7 +18,7 @@ const Archived = () => {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
-        <ButtonAction headers={clientEncode.clientId} />
+        <ButtonAction  />
         <UserHeaderTop />
       <div className="row">
        

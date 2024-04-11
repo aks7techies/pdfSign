@@ -16,6 +16,8 @@ import "./clientstyle.css";
 import {ToastContainer, toast} from "react-toastify";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { useDispatch } from 'react-redux';
+import {saveData} from '../../redux/slices/clientData';
 
 import "react-toastify/dist/ReactToastify.css";
 const style = {
@@ -38,6 +40,7 @@ const ClientMaster = () => {
   const [loader, setLoader] = React.useState(true);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 10;
+  const dispatch = useDispatch();
 
   const redirect = useNavigate();
   const fetchData = async () => {
@@ -120,8 +123,9 @@ const ClientMaster = () => {
   };
   const sendFunction = (value) => {
     // console.log(value);
-   const base64Encoded = btoa(value);
-    redirect(`/clientMaster/draft/${base64Encoded}`);
+    dispatch(saveData(value));
+  //  const base64Encoded = btoa(value);
+    redirect(`/clientMaster/draft`);
   };
 
   const handlePageChange = (event, page) => {

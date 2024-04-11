@@ -6,7 +6,8 @@ import * as Yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from "react-redux";
-import {fetchData} from '../../redux/slices/ProfileData';
+import { saveData } from "../../redux/slices/adminData";
+// import {fetchData} from '../../redux/slices/ProfileData';
 
 
 
@@ -57,7 +58,7 @@ function Login(){
     
       const data = await response.json();
 
-      dispatch(fetchData(data));
+      dispatch(saveData(data));
       const jsonData = JSON.parse(JSON.stringify(data));
       // console.log(jsonData.token.token); // Log the response data
       sessionStorage.setItem("KeyId", jsonData.token.token);

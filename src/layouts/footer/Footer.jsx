@@ -9,22 +9,15 @@ const Year = new Date().getFullYear();
   return (
     <>
       <div className=" shifted container-fluid bg-color fixed-bottom">
-        <footer className="d-flex flex-wrap justify-content-between align-items-center  my-4 ">
+        <footer className="d-flex flex-wrap justify-content-between align-items-center  my-1 ">
           <div className="col-md-4 d-flex align-items-center">
-            <a
-              href="/"
-              className="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
-            >
-              {/* <svg className="bi" width="30" height="24">
-                
-              </svg> */}
-            </a>
-            <span className="mb-3 mb-md-0 text-body-secondary">
+            
+            <span className=" mb-md-0 text-body-secondary">
             © {Year} PDF Signature, Inc
             </span>
           </div>
 
-          <ul className="nav col-md-4 justify-content-end list-unstyled d-flex me-5">
+          <ul className="nav col-md-4 list-unstyled d-flex me-5">
             <li className="ms-3">
               <a className="text-body-secondary" href="/">
                 <TwitterIcon color="dark" />

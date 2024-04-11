@@ -51,11 +51,11 @@ function App() {
           
            <Route path="/clientMaster" >
             <Route index={true}  element={<ClientMaster />} />
-            <Route path="complete/:clientId" element={<AllUserData />} />
-            <Route path="draft/:clientId" element={<Draft />} />
-            <Route path="un-complete/:clientId" element={<UnCompleteData />} />
-            <Route path="verification/:clientId" element={<Verification />} />
-            <Route path="archived/:clientId" element={<Archived />} />
+            <Route path="complete" element={<AllUserData />} />
+            <Route path="draft" element={<Draft />} />
+            <Route path="un-complete" element={<UnCompleteData />} />
+            <Route path="verification" element={<Verification />} />
+            <Route path="archived" element={<Archived />} />
             <Route  path="historyActivity" name="History" element={<HistoryMaster />} />
           </Route>
 

@@ -4,7 +4,7 @@ import Footer from "../../layouts/footer/Footer";
 import ButtonAction from "../buttonaction/ButtonAction";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 // import AddIcon from "@mui/icons-material/Add";
-import  {useParams}  from 'react-router-dom';
+import {useSelector, useDispatch } from 'react-redux';
 // import Box from "@mui/material/Box";
 // import Button from "@mui/material/Button";
 // import Typography from "@mui/material/Typography";
@@ -18,12 +18,9 @@ import UserHeaderTop from "../userheadertop/UserHeaderTop";
 
 
 function UserData() {
-  // const confirmFunction = ()=>{
 
-  // }
-  const clientEncode = useParams();
-  const clientIdBase64Decode = atob(clientEncode.clientId);
-
+  const clientIdBase64Decode = useSelector((state)=>state.client.value);
+  console.log(clientIdBase64Decode);
   return (
     <>
       <Header />
@@ -34,7 +31,7 @@ function UserData() {
         </a>
       </section>
       <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
-         <ButtonAction  headers={clientEncode.clientId} />  
+         <ButtonAction  />  
         <UserHeaderTop />
         <div className="row">
           

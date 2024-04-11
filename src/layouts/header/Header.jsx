@@ -16,13 +16,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 function Header() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const getData = useSelector((state) => state.profile.value);
+  const [loader, setLoader] = React.useState(true);
   // const [initialRoute, setInitialRoute] = useState("");
   
   const navigate = useNavigate();
   const location = useLocation();
-
- 
-
   useEffect(() => {
     const retrievedValue = sessionStorage.getItem("KeyId");
    
@@ -30,17 +29,17 @@ function Header() {
       navigate("/"); // Redirect to home page if session is not set
       // Show loading indicator
     }
-    // setTimeout(() => {
-    //   setLoader(false); // Hide loader after data is loaded
-    // }, 100);
+    setTimeout(() => {
+      setLoader(false); // Hide loader after data is loaded
+    }, 100);
   }, [navigate]);
 
   const handleNavigation = (route) => {
     navigate(route);
   };
-  const getData = useSelector((state) => state.profile.profileData);
+  
 
-  // console.log(getData.data.user);
+  // console.log(getData);
   const name = getData.data.user.name;
   const username = getData.data.user.username;
 
@@ -57,8 +56,16 @@ function Header() {
 
   return (
     <>
-      {/* <Menu /> */}
-
+     {loader ? (
+        <div className="loader-container d-flex justify-content-center align-items-center">
+          <img
+            src="../../../assets/images/loader.gif"
+            alt="Loading..."
+            className="loader-image"
+          />
+        </div>
+      ) : (
+      <div>
       <nav className="navbar navbar-expand-lg bg-color1">
         <div className="container-fluid px-1">
           <a className="navbar-brand navbar-icon  text-light" href="/">
@@ -268,6 +275,7 @@ function Header() {
           {/* hwekjgghu */}
         </div>
       </div>
+      </div>)}
     </>
   );
 }

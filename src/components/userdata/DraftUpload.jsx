@@ -3,7 +3,7 @@ import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import ButtonAction from "../buttonaction/ButtonAction";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,6 +22,8 @@ import "react-toastify/dist/ReactToastify.css";
 import UserHeaderTop from "../userheadertop/UserHeaderTop";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import {useSelector, useDispatch } from 'react-redux';
+import {saveData} from '../../redux/slices/historyDraftData';
 
 const style = {
   position: "absolute",
@@ -45,8 +47,8 @@ const DraftUpload = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 10;
   const redirect = useNavigate();
-  const clientEncode = useParams();
-  const clientIdBase64Decode = atob(clientEncode.clientId);
+  const dispatch = useDispatch();
+  const clientIdBase64Decode = useSelector((state)=>state.client.value);
   useEffect(() => {
     fetchData();
   }, [redirect, gettoken]);
@@ -135,6 +137,17 @@ const DraftUpload = () => {
       );
 
       if (response.status === 201) {
+        
+
+        const postHistory = await axios.post(
+          "http://localhost:8000/api/history",{
+             clientId: response.data.data.clientId,
+            draftId:response.data.insertedId,
+            token:gettoken,
+            Activity:"Create Draft Document",
+            discription:"The Create Draft Document functionality enables users to upload and save draft documents into the system for further processing or review. This feature is particularly useful in scenarios where users need to prepare documents before finalizing and distributing them "
+          }
+        );
         setOpen(false);
         toast.success(response.data.msg, {
           position: "top-right",
@@ -157,7 +170,6 @@ const DraftUpload = () => {
   const confirmFunction = async (value) => {};
   const sendFunction = async (value) => {
     // console.log(value);
-
     const formData = {
       id: value.id,
       clientId: value.clientId,
@@ -189,7 +201,9 @@ const DraftUpload = () => {
       console.error("Error submitting form:", error);
     }
   };
-  const Historyfunctio = () => {
+  const Historyfunctio = (value) => {
+
+    dispatch(saveData(value));
     redirect("/clientMaster/historyActivity");
   };
   const handlePageChange = (event, page) => {
@@ -221,7 +235,7 @@ const DraftUpload = () => {
           </section>
 
           <section className="shifted container-fluid p-4 col-md-10 col-sm-12">
-            <ButtonAction headers={clientEncode.clientId} />
+            <ButtonAction  />
             <UserHeaderTop />
             <div className="row">
               <div className="col-md-11 col-sm-12 col-xl-11">
@@ -539,11 +553,11 @@ const DraftUpload = () => {
                                 </td>
                                 <td>
                                   {new Date(
-                                    item.createdAt
+                                    item.dateTimeOriginal
                                   ).toLocaleDateString()}
                                   <br />
                                   {new Date(
-                                    item.createdAt
+                                    item.dateTimeOriginal
                                   ).toLocaleTimeString()}
                                 </td>
                                 <td>
