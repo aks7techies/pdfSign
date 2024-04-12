@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -7,19 +7,24 @@ import SaveAsIcon from "@mui/icons-material/SaveAs";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-
 import FileOpenIcon from "@mui/icons-material/FileOpen";
 import "./buttonaction.css";
+import {useSelector } from 'react-redux';
 
 function ButtonAction() {
   const location = useLocation();
   const navigate = useNavigate();
   const [draftDetails, setDraftDetails] = React.useState([]);
+  const [gettoken, setGettoken] = React.useState(null);
   const [unCompleteDetails, setUnCompleteDetails] = React.useState([]);
-  const [loader, setLoader] = React.useState(true);
+  const [completeDetails, setCompleteDetails] = React.useState([]);
+  const [verifyDetails, setVerifyDetails] = React.useState([]);
+  const [archiveDetails, setArchiveDetails] = React.useState([]);
+  const clientData = useSelector((state)=>state.client.value);
+  // const [loader, setLoader] = React.useState(true);
   useEffect(() => {
     fetchData();
-  }, [redirect, gettoken]);
+  }, [navigate, gettoken]);
 
   const handleNavigation = (route) => {
     navigate(route);
@@ -32,24 +37,43 @@ function ButtonAction() {
       return;
     }
     setGettoken(retrievedValue);
-    setTimeout(() => {
-      setLoader(false); // Hide loader after data is loaded
-    }, 100);
+    // setTimeout(() => {
+    //   setLoader(false); // Hide loader after data is loaded
+    // }, 100);
 
     if (gettoken !== null) {
       try {
-        const response = await axios.get(
+        const draftrespon = await axios.get(
+          `http://localhost:8000/api/users?clientId=${clientData}&token=${gettoken}`
+        );
+        const uncompleterespon = await axios.get(
+          `http://localhost:8000/api/unComplete/getAllprocess?clientId=${clientData}&token=${gettoken}`
+        );
+        const completerespon = await axios.get(
           `http://localhost:8000/api/client?token=${gettoken}`
         );
-
-        const obj = JSON.parse(JSON.stringify(response));
-
-        if (obj.status === 200) {
-          setClientsDetails(obj.data.data);
+        const verifyrespon = await axios.get(
+          `http://localhost:8000/api/client?token=${gettoken}`
+        );
+        const archiverespon = await axios.get(
+          `http://localhost:8000/api/client?token=${gettoken}`
+        );
+        const objDraftData = JSON.parse(JSON.stringify(draftrespon));
+        const objUncompleteData = JSON.parse(JSON.stringify(uncompleterespon));
+        const objCompleteData = JSON.parse(JSON.stringify(completerespon));
+        const objVerifyData = JSON.parse(JSON.stringify(verifyrespon));
+        const objArchive = JSON.parse(JSON.stringify(archiverespon));
+        if (objDraftData.status === 200 &&  objUncompleteData.status === 200 && objCompleteData.status === 200 && objVerifyData.status === 200 && objArchive.status === 200) {
+          setDraftDetails(objDraftData.data.data);
+          setUnCompleteDetails(objUncompleteData.data.data);
+          setCompleteDetails(objCompleteData.data.data);
+          setVerifyDetails(objVerifyData.data.data);
+          setArchiveDetails(objArchive.data.data);
         } else {
-          toast.danger(obj.msg, {
-            position: "top-right",
-          });
+          console.error(objDraftData.msg);
+          // toast.danger(objDraftData.msg, {
+          //   position: "top-right",
+          // });
         }
       } catch (error) {
         // toast.danger( error.ErrorMessage, {
@@ -79,8 +103,7 @@ function ButtonAction() {
                 style={{backgroundColor: "#0075a3"}}
                 className=" ms-1 p-1 text-light rounded-circle"
               >
-                {" "}
-                0
+                {draftDetails.length}
               </span>
             </Button>
           </li>
@@ -98,8 +121,7 @@ function ButtonAction() {
                 style={{backgroundColor: "#0075a3"}}
                 className=" ms-1 p-1 text-light rounded-circle"
               >
-                {" "}
-                0
+                {completeDetails.length}
               </span>
             </Button>
           </li>
@@ -117,8 +139,8 @@ function ButtonAction() {
                 style={{backgroundColor: "#0075a3"}}
                 className=" ms-1 p-1 text-light rounded-circle"
               >
-                {" "}
-                0
+                {unCompleteDetails.length}
+                
               </span>
             </Button>
           </li>
@@ -136,8 +158,8 @@ function ButtonAction() {
                 style={{backgroundColor: "#0075a3"}}
                 className=" ms-1 p-1 text-light rounded-circle"
               >
-                {" "}
-                0
+                {verifyDetails.length}
+                
               </span>
             </Button>
           </li>
@@ -155,8 +177,8 @@ function ButtonAction() {
                 style={{backgroundColor: "#0075a3"}}
                 className=" ms-1 p-1 text-light rounded-circle"
               >
-                {" "}
-                0
+                {archiveDetails.length}
+                
               </span>
             </Button>
           </li>

@@ -90,7 +90,7 @@ const TemplateMaster = () => {
 
         const obj = JSON.parse(JSON.stringify(response));
 
-        if (obj.status == 200) {
+        if (obj.status === 200) {
           setTemplatesDetails(obj.data.data);
         } else {
           toast.danger(obj.msg, {

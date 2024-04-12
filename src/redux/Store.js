@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import adminData from './slices/adminData';
 import historyDataReducer from './slices/historyDraftData';
 import clientDataReducer from './slices/clientData';
+import captureImageReducer from './slices/captureImage';
 
 const persistConfig = {
   key: 'root',
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   profile: adminData,
   history: historyDataReducer,
   client: clientDataReducer,
+  captureImage:captureImageReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,30 +1,90 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../layouts/header/Header";
 import Footer from "../../layouts/footer/Footer";
 import ButtonAction from "../buttonaction/ButtonAction";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 // import AddIcon from "@mui/icons-material/Add";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import {useSelector, useDispatch } from 'react-redux';
-// import Box from "@mui/material/Box";
-// import Button from "@mui/material/Button";
-// import Typography from "@mui/material/Typography";
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import Modal from "@mui/material/Modal";
-// import {Formik, Field, ErrorMessage} from "formik";
-// import * as Yup from "yup";
-// import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import  {useNavigate}  from 'react-router-dom';
+import axios from "axios";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import './allpages.css';
 import UserHeaderTop from "../userheadertop/UserHeaderTop";
-
-
 function UserData() {
-
+  const [gettoken, setGettoken] = React.useState(null);
+  const redirect = useNavigate();
+  const [completeDetails, setCompleteDetails] = React.useState([]);
+  const [loader, setLoader] = React.useState(true);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
   const clientIdBase64Decode = useSelector((state)=>state.client.value);
-  console.log(clientIdBase64Decode);
+  // console.log(clientIdBase64Decode);
+
+  useEffect(() => {
+    fetchData();
+  }, [redirect, gettoken]);
+  const fetchData = async () => {
+   
+    const retrievedValue = sessionStorage.getItem("KeyId");
+    if (!retrievedValue) {
+      redirect("/"); // Redirect to home page if session is not set
+      // Show loading indicator
+      return;
+    }
+    setGettoken(retrievedValue);
+    setTimeout(() => {
+      setLoader(false); // Hide loader after data is loaded
+    }, 100);
+
+    if (gettoken !== null) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/unComplete/getAllprocess?clientId=${clientIdBase64Decode}&token=${gettoken}`
+        );
+        const obj = JSON.parse(JSON.stringify(response));
+
+        if (obj.status === 200) {
+          setCompleteDetails(obj.data.data);
+        } else {
+          // console.log(obj.data.msg);
+          toast.danger(obj.data.msg, {
+            position: "top-right",
+          });
+        }
+      } catch (error) {
+        const err = JSON.parse(JSON.stringify(error));
+        console.log(err.message);
+      }
+    }
+  };
+
+
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = completeDetails.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <>
+    {loader ? (
+        <div className="loader-container d-flex justify-content-center align-items-center">
+          <img
+            src="../../../assets/images/loader.gif"
+            alt="Loading..."
+            className="loader-image"
+          />
+        </div>
+      ) : (
+      <div>
+      <ToastContainer />
       <Header />
-      {/* <ToastContainer /> */}
       <section className="container-fluid px-4 pt-3">
         <a role="button" className="btn btn-dark" href="/dashboard">
           <ArrowBackIosNewIcon /> Back
@@ -50,27 +110,30 @@ function UserData() {
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                       
                         <th scope="col">Document Name</th>
-                        <th scope="col">Date Time</th>
                         <th scope="col">Orginal Document</th>
+                        <th scope="col">Date Time</th>
                         <th scope="col">Sign Document</th>
                         <th scope="col">Received Date Time</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>@mdo</td>
+                    {completeDetails &&
+                            currentItems.map((item, index) => (
+                              <tr key={item._id}>
+                                <td>
+                                  {index + 1 + (currentPage - 1) * itemsPerPage}
+                                </td>
+                                <td>{item.draftDocumentName}</td>
                         <td>
-                          {new Date().toLocaleDateString()} <br />
-                          {new Date().toLocaleTimeString()}{" "}
+                          <a href={""}> <DownloadForOfflineIcon color="success" /> </a>
                         </td>
                         <td>
-                          <a href="/"> View </a>
+                          {new Date(item.dateTimeOriginal).toLocaleDateString()} <br />
+                          {new Date(item.dateTimeOriginal).toLocaleTimeString()}
                         </td>
                         <td>
-                          <a href="/"> View </a>
+                          <a href={""}> <DownloadForOfflineIcon color="success" /> </a>
                         </td>
                         <td>
                           <td>
@@ -78,8 +141,25 @@ function UserData() {
                             {new Date().toLocaleTimeString()}{" "}
                           </td>
                         </td>
-                      </tr>
+                      </tr>))}
+                      {currentItems && currentItems == 0 &&(
+                              <tr>
+                                <td>No Record Found</td>
+                              </tr>
+                      )}
                     </tbody>
+                    {completeDetails && completeDetails.length > 0 && (
+                          <Stack spacing={1} justifyContent="center">
+                            <Pagination
+                              count={Math.ceil(
+                                completeDetails.length / itemsPerPage
+                              )}
+                              page={currentPage}
+                              onChange={handlePageChange}
+                              color="primary"
+                            />
+                          </Stack>
+                        )}
                   </table>
                 </div>
               </div>
@@ -88,8 +168,8 @@ function UserData() {
           
         </div>
       </section>
-
       <Footer />
+      </div>)}
     </>
   );
 }
