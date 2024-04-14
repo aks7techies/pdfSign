@@ -14,9 +14,8 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import AutoFixOffIcon from "@mui/icons-material/AutoFixOff";
 import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib";
 // import Webcam from "react-webcam";
-import { Document, Page, pdfjs } from "react-pdf";
-// import CapturePhoto from "./CapturePhoto";
-// import { useSelector } from "react-redux";
+import {Document, Page, pdfjs} from "react-pdf";
+import CapturePhoto from "./CapturePhoto";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -36,9 +35,6 @@ const UploadSignature = () => {
   // const [pdfBytes, setPdfBytes] = React.useState(null);
   const [pdfLink, setPdfLink] = React.useState("assets/uploads/file2.pdf");
   const [showModal, setShowModal] = React.useState(false);
-  const [showSingerModal, setShowSingerModal] = React.useState(false);
-  // const captureImageData = useSelector((state)=> state.captureImage.value);
-  // console.log(captureImageData);
 
   useEffect(() => {
     setShowModal(true);
@@ -67,6 +63,9 @@ const UploadSignature = () => {
   const retake = () => {
     setImgSrc(null);
     // dispatch(saveData(0));
+  };
+  const handleSingerCloseModal = () => {
+    setShowSingerModal(false);
   };
 
   const embedImages = async (pdfLink, imageUrl) => {
@@ -339,29 +338,29 @@ const UploadSignature = () => {
                 </button> */}
               </div>
             </div>
-            <div className="container  d-flex justify-content-center flex-column align-items-center">
-              {imgSrc ? (
+
+            <CapturePhoto />
+
+            {/* <div className="row mb-3">
+             
+              <div className="col-md-12 text-center">
+               
                 <img
-                  src={imgSrc}
-                  alt="webcam"
-                  style={{ width: "100%", height: "auto" }}
+                  src="../assets/images/small/small-1.jpg"
+                  alt="Your Image"
+                  className="rounded-circle"
+                  style={{width: "200px", height: "200px"}}
                 />
-              ) : (
-                <Webcam ref={webcamRef} style={{ width: "100%" }} />
-              )}
-              <div className="btn-container">
-                {imgSrc ? (
-                  <button className="btn btn-primary my-1" onClick={retake}>
-                    Retake photo
-                  </button>
-                ) : (
-                  <button className="btn btn-primary my-1" onClick={capture}>
-                    Capture photo
-                  </button>
-                )}
               </div>
             </div>
-            {/* <CapturePhoto /> */}
+            <div className="row mt-5">
+              <div className="col-md-12 d-flex justify-content-center">
+                
+                <button className="btn btn-primary me-2">Retake</button>
+              
+                <button className="btn btn-success">Submit</button>
+              </div>
+            </div> */}
           </Box>
         </Modal>
 
@@ -369,7 +368,118 @@ const UploadSignature = () => {
           <div className="card border-0">
             <div className="card-body">
               <div className="row">
-                <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
+                <div className="col-md-3 col-lg-3 col-sm-12 col-xs-12 mb-4">
+                  <div className="card" style={{width: "100%"}}>
+                    <div className="card-header text-center">
+                      <Box sx={{width: "100%"}}>
+                        <Tabs
+                          value={value}
+                          onChange={handleChange_123}
+                          textColor="primary"
+                          indicatorColor="primary"
+                          aria-label="secondary tabs example"
+                        >
+                          <Tab value="1" label="Upload file" />
+                          <Tab value="2" label="Written Type" />
+                        </Tabs>
+                      </Box>
+                    </div>
+
+                    <div
+                      className={
+                        "card-body" + (value === "1" ? " d-block" : " d-none")
+                      }
+                    >
+                      <ul className="list-group list-group-flush">
+                        <li className="list-group-item">
+                          <label
+                            htmlFor="uploadSignature"
+                            className="form-label"
+                          >
+                            Upload Signature
+                          </label>
+                          <div className="image-upload-wrap ">
+                            <div {...getRootProps()}>
+                              <input
+                                {...getInputProps()}
+                                name="Uploadsign"
+                                type="file"
+                              />
+                              {isDragActive ? (
+                                <h4 className="text-center">
+                                  <i>Drop the files</i>
+                                </h4>
+                              ) : (
+                                <h4 className="text-center">
+                                  <i> Drop down, or Select files</i>
+                                </h4>
+                              )}
+                            </div>
+                          </div>
+                          <span className="text-danger ">{error}</span>
+
+                          <div className="d-flex justify-content-end align-content-center mt-2">
+                            {preview ? (
+                              <img
+                                style={{border: "1px solid #000"}}
+                                src={preview}
+                                alt={preview}
+                                width={150}
+                                height={50}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </li>
+                      </ul>
+                      <div className="mt-3 text-center">
+                        <button
+                          onClick={submitForm_123}
+                          className="btn btn-primary"
+                          name="btn"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      className={
+                        "card-body" + (value === "2" ? " d-block" : " d-none")
+                      }
+                    >
+                      <ul className="list-group list-group-flush">
+                        <li className="list-group-item">
+                          <div className="">
+                            <label htmlFor="writentype" className="form-label">
+                              Enter Signature
+                            </label>
+                            <input
+                              type="text"
+                              name="writentype"
+                              onChange={(e) => handleChange(e.target.value)}
+                              id="writentype"
+                              placeholder="Enter Signature"
+                              className="form-control"
+                              required={value === "2" ? true : false}
+                            />
+                          </div>
+                        </li>
+                      </ul>
+                      <div className="mt-3 text-center">
+                        <button
+                          onClick={submitForm}
+                          className="btn btn-primary"
+                          name="btn"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-9 col-lg-9 col-sm-12 col-xs-12 ">
                   <div className="card">
                     {/* <div className="button-css">
                       <button className="btn btn-outline-dark circles mb-2" onClick={handleZoomIn}><b>+</b></button>
@@ -407,203 +517,6 @@ const UploadSignature = () => {
                     </div>
                   </div>
                 </div>
-                <Modal
-                  open={showSingerModal}
-                  // onClose={handleSingerCloseModal}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: "60%",
-                      backgroundColor: "white",
-                      padding: "20px",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    <div className="row border-bottom mb-2 ">
-                      <div className="col-md-12 d-flex justify-content-between align-items-center">
-                        <h5 id="modal-title">
-                          Please Sign Your name on the pad below
-                        </h5>
-                        {/* <button
-                          className="btn btn-outline-dark rounded-circle"
-                          style={{position: "relative", top: "-6px"}}
-                          onClick={handleSingerCloseModal}
-                        >
-                          <CloseIcon />
-                        </button> */}
-                      </div>
-                    </div>
-                    <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-4">
-                      <div className="" style={{ width: "100%" }}>
-                        <div
-                          className={
-                            "card-body" +
-                            (value === "1" ? " d-block" : " d-none")
-                          }
-                        >
-                          <ul className="list-group list-group-flush">
-                            <li className="list-group-item">
-                              <label
-                                htmlFor="uploadSignature"
-                                className="form-label"
-                              >
-                                Upload Signature
-                              </label>
-                              <div className="image-upload-wrap ">
-                                <div
-                                  {...getRootProps()}
-                                  style={{ height: "120px" }}
-                                  className="d-flex justify-content-center align-items-center"
-                                >
-                                  <input
-                                    {...getInputProps()}
-                                    name="Uploadsign"
-                                    type="file"
-                                  />
-                                  {isDragActive ? (
-                                    <h4 className="text-center">
-                                      <i>Drop the files</i>
-                                    </h4>
-                                  ) : (
-                                    <h4 className="text-center">
-                                      <i> Drop down, or Select files</i>
-                                    </h4>
-                                  )}
-                                </div>
-                              </div>
-                              <span className="text-danger ">{error}</span>
-
-                              <div className="d-flex justify-content-end align-content-center mt-2">
-                                {preview ? (
-                                  <img
-                                    style={{ border: "1px solid #000" }}
-                                    src={preview}
-                                    alt={preview}
-                                    width={150}
-                                    height={50}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div
-                          className={
-                            "card-body" +
-                            (value === "2" ? " d-block" : " d-none")
-                          }
-                        >
-                          <ul className="list-group list-group-flush">
-                            <li className="list-group-item">
-                              <label
-                                htmlFor="writentype"
-                                className="form-label"
-                              >
-                                Enter Signature
-                              </label>
-                              <div className="div-signature">
-                                <input
-                                  type="text"
-                                  name="writentype"
-                                  onChange={(e) => handleChange(e.target.value)}
-                                  id="writentype"
-                                  placeholder="Enter Signature"
-                                  className="form-control"
-                                  ref={inputRef}
-                                  required={value === "2" ? true : false}
-                                />
-                              </div>
-                              <div className="d-flex justify-content-end align-content-center mt-2">
-                                <div
-                                  className={
-                                    writeName
-                                      ? "previewStyleClass border border-1 px-4 py-2  rounded"
-                                      : "d-none"
-                                  }
-                                >
-                                  {writeName}
-                                </div>
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="modal-footer">
-                      <div className=" text-center mb-2">
-                        <Box sx={{ width: "100%" }}>
-                          <Tabs
-                            value={value}
-                            onChange={handleChange_123}
-                            textColor="primary"
-                            indicatorColor="primary"
-                            aria-label="secondary tabs example"
-                          >
-                            <Tab
-                              value="1"
-                              label="Upload file"
-                              icon={<FileUploadIcon />}
-                              className="flex-row"
-                            />
-                            <Tab
-                              value="2"
-                              label="Convert Signature"
-                              icon={<DrawIcon />}
-                              className="flex-row"
-                            />
-                          </Tabs>
-                        </Box>
-                      </div>
-                      <div className="card-body">
-                        <div className=" text-center">
-                          <button onClick={resetSignature} title="Erase" >
-                            <AutoFixOffIcon />
-                          </button>
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          "card-body" + (value === "1" ? " d-block" : " d-none")
-                        }
-                      >
-                        <div className=" text-end">
-                          <button
-                            onClick={submitForm_123}
-                            className="btn btn-primary"
-                            name="btn"
-                          >
-                            Sign
-                          </button>
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          "card-body" + (value === "2" ? " d-block" : " d-none")
-                        }
-                      >
-                        <div className=" text-end">
-                          <button
-                            onClick={submitForm}
-                            className="btn btn-primary"
-                            name="btn"
-                          >
-                            Sign
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </Box>
-                </Modal>
               </div>
             </div>
           </div>

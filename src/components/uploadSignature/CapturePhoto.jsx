@@ -11,8 +11,9 @@ const CapturePhoto = () => {
     useEffect(()=>{
       dispatch(saveData(0));
     },[])
+    const dispatch = useDispatch();
   
-    const capture = () => {
+    const capture = React.useCallback(() => {
       const imageSrc = webcamRef.current.getScreenshot();
       setImgSrc(imageSrc);
         if(imageSrc!==null){
@@ -21,34 +22,35 @@ const CapturePhoto = () => {
           dispatch(saveData(0));
         }
     };
+      if(imageSrc !== null){
+        dispatch(saveData(imageSrc));
+      }
+    }, [webcamRef, dispatch]);
   
-    const retake = () => {
+    const retake = React.useCallback(() => {
       setImgSrc(null);
-      dispatch(saveData(0));
-    };
-    // console.log(imgSrc)
+    }, []);
     
-  
-
-    return( <>
-    <div className="container  d-flex justify-content-center flex-column align-items-center">
-      {imgSrc ? (
-        <img src={imgSrc} alt="webcam" style={{ width: "100%", height: "auto" }} />
-      ) : (
-      <Webcam  ref={webcamRef} style={{ width:"100%" }}/>
-      )}
-      <div className="btn-container">
+    return (
+      <div className="container d-flex justify-content-center flex-column align-items-center">
         {imgSrc ? (
-          <button className="btn btn-primary my-1" onClick={retake}>Retake photo</button>
+          <img src={imgSrc} alt="webcam" style={{ width: "100%", height: "auto" }} />
         ) : (
-          <button className="btn btn-primary my-1" onClick={capture}>Capture photo</button>
+          <Webcam
+            ref={webcamRef}
+            style={{ width:"100%" }}
+            screenshotFormat="image/jpeg" // Capture photo instead of video
+          />
         )}
+        <div className="btn-container">
+          {imgSrc ? (
+            <button className="btn btn-primary my-1" onClick={retake}>Retake photo</button>
+          ) : (
+            <button className="btn btn-primary my-1" onClick={capture}>Capture photo</button>
+          )}
+        </div>
       </div>
-    </div>
-
-    
-    
-    </>);
+    );
 }
 
 export default CapturePhoto;
