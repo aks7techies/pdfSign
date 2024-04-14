@@ -37,6 +37,7 @@ const TemplateMaster = React.lazy(() =>
 const HistoryMaster = React.lazy(() =>
   import("./components/history/HistoryActivity")
 );
+const AddDraftDocument = React.lazy(()=> import("./components/userdata/editPdfForm/PreparePdf"));
 
 
 const Page404 = React.lazy(() => import("./components/pages/page404/Page404"));
@@ -51,13 +52,14 @@ function App() {
           
            <Route path="/clientMaster" >
             <Route index={true}  element={<ClientMaster />} />
-            <Route path="complete/:clientId" element={<AllUserData />} />
-            <Route path="draft/:clientId" element={<Draft />} />
-            <Route path="un-complete/:clientId" element={<UnCompleteData />} />
-            <Route path="verification/:clientId" element={<Verification />} />
-            <Route path="archived/:clientId" element={<Archived />} />
+            <Route path="complete" element={<AllUserData />} />
+            <Route path="draft" element={<Draft />} />
+            <Route path="un-complete" element={<UnCompleteData />} />
+            <Route path="verification" element={<Verification />} />
+            <Route path="archived" element={<Archived />} />
             <Route  path="historyActivity" name="History" element={<HistoryMaster />} />
           </Route>
+          <Route exact path="addDraft" name="Add Draft" element={<AddDraftDocument />} />
 
           <Route
             exact

@@ -16,6 +16,8 @@ import "./clientstyle.css";
 import {ToastContainer, toast} from "react-toastify";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { useDispatch } from 'react-redux';
+import {saveData} from '../../redux/slices/clientData';
 
 import "react-toastify/dist/ReactToastify.css";
 const style = {
@@ -38,6 +40,7 @@ const ClientMaster = () => {
   const [loader, setLoader] = React.useState(true);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 10;
+  const dispatch = useDispatch();
 
   const redirect = useNavigate();
   const fetchData = async () => {
@@ -82,11 +85,15 @@ const ClientMaster = () => {
   const initialValues = {
     name: "",
     email: "",
+    mobileNo:"",
   };
 
   const signInSchema = Yup.object().shape({
     name: Yup.string().required("Name is required*"),
     email: Yup.string().email().required("Email is required*"),
+    mobileNo: Yup.string()
+    .matches(/^[6-9][0-9]{9}$/, 'Mobile number must start with a digit between 6 and 9 and be 10 digits in total')
+    .required('Mobile number is required'),
   });
 
   const submitForm = async (values) => {
@@ -94,6 +101,7 @@ const ClientMaster = () => {
       const response = await axios.post("http://localhost:8000/api/client", {
         name: values.name,
         email: values.email,
+        mobileNo: values.mobileNo,
         token: gettoken,
       });
 
@@ -120,8 +128,9 @@ const ClientMaster = () => {
   };
   const sendFunction = (value) => {
     // console.log(value);
-   const base64Encoded = btoa(value);
-    redirect(`/clientMaster/draft/${base64Encoded}`);
+    dispatch(saveData(value));
+  //  const base64Encoded = btoa(value);
+    redirect(`/clientMaster/draft`);
   };
 
   const handlePageChange = (event, page) => {
@@ -253,6 +262,34 @@ const ClientMaster = () => {
                                       className="error text-danger"
                                     />
                                   </div>
+                                  <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-3">
+                                    <label
+                                      htmlFor="mobileNo"
+                                      className="form-label mb-0"
+                                    >
+                                      Mobile No.
+                                      <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                      type="number"
+                                      value={values.mobileNo}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      className={
+                                        "form-control" +
+                                        (errors.mobileNo && touched.mobileNo
+                                          ? " input-error"
+                                          : "")
+                                      }
+                                      name="mobileNo"
+                                      id="mobileNo"
+                                    />
+                                    <ErrorMessage
+                                      name="mobileNo"
+                                      component="span"
+                                      className="error text-danger"
+                                    />
+                                  </div>
 
                                   <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12 mb-3">
                                     <button
@@ -287,6 +324,7 @@ const ClientMaster = () => {
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Mobile No.</th>
                         <th scope="col">Date Time</th>
                         <th scope="col">Action</th>
                       </tr>
@@ -300,6 +338,7 @@ const ClientMaster = () => {
                             </td>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
+                            <td>{item.mobileNo}</td>
                             <td>
                               {new Date(item.createdAt).toLocaleDateString()}
                               <br />

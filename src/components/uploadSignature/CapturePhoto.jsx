@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Webcam from "react-webcam";
+import { useDispatch } from "react-redux";
+import { saveData } from "../../redux/slices/captureImage";
 
 const CapturePhoto = () => {
     const webcamRef = React.useRef(null);
     const [imgSrc, setImgSrc] = React.useState(null);
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+      dispatch(saveData(0));
+    },[])
   
     const capture = () => {
       const imageSrc = webcamRef.current.getScreenshot();
       setImgSrc(imageSrc);
-     
+        if(imageSrc!==null){
+          dispatch(saveData(1));
+        }else{
+          dispatch(saveData(0));
+        }
     };
   
     const retake = () => {
       setImgSrc(null);
+      dispatch(saveData(0));
     };
-    console.log(imgSrc)
+    // console.log(imgSrc)
     
   
 
