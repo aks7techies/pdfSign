@@ -11,9 +11,9 @@ const CapturePhoto = () => {
     useEffect(()=>{
       dispatch(saveData(0));
     },[])
-    const dispatch = useDispatch();
+   
   
-    const capture = React.useCallback(() => {
+    const capture = () => {
       const imageSrc = webcamRef.current.getScreenshot();
       setImgSrc(imageSrc);
         if(imageSrc!==null){
@@ -21,15 +21,13 @@ const CapturePhoto = () => {
         }else{
           dispatch(saveData(0));
         }
-    };
-      if(imageSrc !== null){
-        dispatch(saveData(imageSrc));
-      }
-    }, [webcamRef, dispatch]);
+       };
+     
+    
   
-    const retake = React.useCallback(() => {
+    const retake = () => {
       setImgSrc(null);
-    }, []);
+    };
     
     return (
       <div className="container d-flex justify-content-center flex-column align-items-center">
