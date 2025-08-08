@@ -58,7 +58,7 @@ const ClientMaster = () => {
     if (gettoken !== null) {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/client?token=${gettoken}`
+          `http://localhost:8000/api/client?token=${gettoken}&insertedUser=${sessionStorage.getItem("userId")}`
         );
 
         const obj = JSON.parse(JSON.stringify(response));
@@ -102,6 +102,7 @@ const ClientMaster = () => {
         name: values.name,
         email: values.email,
         mobileNo: values.mobileNo,
+        insertedUser: sessionStorage.getItem("userId"),
         token: gettoken,
       });
 
@@ -127,7 +128,6 @@ const ClientMaster = () => {
     }
   };
   const sendFunction = (value) => {
-    // console.log(value);
     dispatch(saveData(value));
   //  const base64Encoded = btoa(value);
     redirect(`/clientMaster/draft`);

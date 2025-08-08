@@ -47,7 +47,7 @@ const UnCompleteUserData = () => {
           `http://localhost:8000/api/unComplete/getAllprocess?clientId=${clientIdBase64Decode}&token=${gettoken}`
         );
         const obj = JSON.parse(JSON.stringify(response));
-
+         console.log( obj);
         if (obj.status === 200) {
           setUnCompleteDetails(obj.data.data);
         } else {

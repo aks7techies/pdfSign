@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect,useRef} from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import Modal from "@mui/material/Modal";
 
 // import CloseIcon from "@mui/icons-material/Close";
@@ -12,6 +12,8 @@ import Webcam from "react-webcam";
 import DrawIcon from "@mui/icons-material/Draw";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import AutoFixOffIcon from "@mui/icons-material/AutoFixOff";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+
 import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib";
 // import Webcam from "react-webcam";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -73,70 +75,95 @@ const UploadSignature = () => {
   };
 
   const embedImages = async (pdfLink, imageUrl) => {
-    const pdfUrl = pdfLink; // Replace with the path to your existing PDF
-    // Path to the image you want to embed
-
     try {
-      const [pdfBytes2, imageBytes] = await Promise.all([
-        fetch(pdfUrl).then((res) => res.arrayBuffer()),
-        fetch(imageUrl).then((res) => res.arrayBuffer()),
+      // Step 1: Fetch both PDF and image
+      const [pdfResponse, imageResponse] = await Promise.all([
+        fetch(pdfLink),
+        fetch(imageUrl, {
+          credentials: "include", // optional depending on CORS/cookies
+        }),
       ]);
 
-      const pdfDoc = await PDFDocument.load(pdfBytes2);
-      let image;
-
-      // Determine the image type based on the file extension
-      const isJpeg = imageUrl.toLowerCase().endsWith(".jpg");
-      const isPng = imageUrl.toLowerCase().endsWith(".png");
-
-      if (isJpeg) {
-        image = await pdfDoc.embedJpg(imageBytes);
-      } else if (isPng) {
-        image = await pdfDoc.embedPng(imageBytes);
-      } else {
-        // If the image format cannot be determined from the extension, try embedding as PNG
-        try {
-          image = await pdfDoc.embedPng(imageBytes);
-        } catch (error) {
-          throw new Error(
-            "Failed to embed image: Unsupported image format. Only JPEG and PNG images are supported."
-          );
-        }
+      // Step 2: Validate PDF response
+      if (!pdfResponse.ok) {
+        throw new Error(
+          `Failed to fetch PDF: ${pdfResponse.status} ${pdfResponse.statusText}`
+        );
       }
+
+      // Step 3: Validate image response
+      if (!imageResponse.ok) {
+        throw new Error(
+          `Failed to fetch image: ${imageResponse.status} ${imageResponse.statusText}`
+        );
+      }
+
+      const contentType = imageResponse.headers.get("content-type");
+      console.log("Image Content-Type:", contentType);
+
+      if (!contentType || !contentType.startsWith("image/")) {
+        throw new Error(`Expected image content-type but got: ${contentType}`);
+      }
+
+      // Step 4: Convert image to ArrayBuffer
+      const imageBuffer = await imageResponse.arrayBuffer();
+
+      // Optional: Log first 10 bytes for debugging
+      const firstBytes = new Uint8Array(imageBuffer).slice(0, 10);
+      console.log(
+        "First bytes:",
+        Array.from(firstBytes)
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join(" ")
+      );
+
+      // Step 5: Load PDF
+      const pdfBytes = await pdfResponse.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+
+      // Step 6: Try embedding the image
+      let embeddedImage;
+      try {
+        if (contentType.includes("jpeg") || contentType.includes("jpg")) {
+          console.log("Embedding as JPEG...");
+          embeddedImage = await pdfDoc.embedJpg(imageBuffer);
+        } else if (contentType.includes("png")) {
+          console.log("Embedding as PNG...");
+          embeddedImage = await pdfDoc.embedPng(imageBuffer);
+        } else {
+          throw new Error("Unsupported image format: " + contentType);
+        }
+      } catch (embedErr) {
+        throw new Error(`Failed to embed image: ${embedErr.message}`);
+      }
+
+      // Step 7: Draw the image on the first page
       const page = pdfDoc.getPages()[0];
-
-      // Adjust the scale as needed
-
-      // Draw the PNG image on the page
-      // page.drawImage(pngImage, {
-      //     x: 100,
-      //     y: 100,
-      //     width: pngDims.width,
-      //     height: pngDims.height,
-      // });
-
-      // Draw the JPG image on the page
-      page.drawImage(image, {
+      page.drawImage(embeddedImage, {
         x: 460,
         y: 140,
         width: 100,
         height: 50,
       });
 
+      // Step 8: Export modified PDF
       const modifiedPdfBytes = await pdfDoc.save();
-      const uint8Array = new Uint8Array(modifiedPdfBytes);
-      const blob = new Blob([uint8Array], { type: "application/pdf" });
+      const blob = new Blob([modifiedPdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
+
+      // Step 9: Trigger download
       const link = document.createElement("a");
       link.href = url;
       link.download = "modified_pdf.pdf";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      // Now, modifiedPdfBytes contains the bytes of the modified PDF with the image embedded.
-      // You can save it to a file or use it as needed.
+      URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error embedding image into PDF:", error);
+      console.error(
+        "❌ Error embedding image into PDF:",
+        error.message || error
+      );
     }
   };
 
@@ -191,7 +218,6 @@ const UploadSignature = () => {
 
   const onDrop = useCallback((acceptedFiles) => {
     const valid = typeValidator(acceptedFiles[0]);
-         console.log(acceptedFiles);
     if (valid.code) {
       acceptedFiles.forEach((file) => {
         const reader = new FileReader();
@@ -199,8 +225,6 @@ const UploadSignature = () => {
         reader.onload = () => {
           const binaryStr = reader.result;
           setPreview(binaryStr);
-          setError(null);
-          setFileName(acceptedFiles[0].path);
           handleUpload(acceptedFiles[0]);
           setWriteName(null);
         };
@@ -215,18 +239,22 @@ const UploadSignature = () => {
 
   const handleUpload = async (file) => {
     const formData = new FormData();
-  
     formData.append("file", file);
     // console.log(formData);
-  
+
     try {
-      const response = await fetch("https://example.com/upload", {
-        // Replace "https://example.com/upload" with your actual upload URL
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:8000/api/upload/uploadFile",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       if (response.ok) {
-        console.log("File uploaded successfully.");
+        const data = await response.json();
+        // Assuming the server returns the file path
+        setFileName(data.filePath);
+        setError(null);
         // Optionally, you can clear the selected file state here
       } else {
         console.error("Failed to upload file.");
@@ -235,7 +263,6 @@ const UploadSignature = () => {
       console.error("Error uploading file:", error);
     }
   };
-  
 
   const typeValidator = (file) => {
     if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
@@ -264,8 +291,7 @@ const UploadSignature = () => {
     setWriteName(null);
     setPreview(null);
     setFileName(null);
-    inputRef.current.value='';
-
+    inputRef.current.value = "";
   };
 
   const submitForm_123 = () => {
@@ -475,9 +501,13 @@ const UploadSignature = () => {
                                       <i>Drop the files</i>
                                     </h4>
                                   ) : (
-                                    <h4 className="text-center">
-                                      <i> Drop down, or Select files</i>
-                                    </h4>
+                                    <div className="d-flex flex-column justify-content-center align-items-center">
+                                      <FileCopyIcon className="fs-1" />
+                                      <b>
+                                        {" "}
+                                        <i> Drop down, or Select files</i>
+                                      </b>
+                                    </div>
                                   )}
                                 </div>
                               </div>
@@ -569,7 +599,7 @@ const UploadSignature = () => {
                       </div>
                       <div className="card-body">
                         <div className=" text-center">
-                          <button onClick={resetSignature} title="Erase" >
+                          <button onClick={resetSignature} title="Erase">
                             <AutoFixOffIcon />
                           </button>
                         </div>

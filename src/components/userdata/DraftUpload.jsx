@@ -169,17 +169,17 @@ const DraftUpload = () => {
 
   const confirmFunction = async (value) => {};
   const sendFunction = async (value) => {
-    // console.log(value);
+    console.log(value);
     const formData = {
       id: value.id,
-      clientId: value.clientId,
+      // clientId: value.clientId,
       stage:1,
       token: gettoken,
     };
 
     try {
       const response = await axios.patch(
-        "http://localhost:8000/api/users/unComplete",
+        "http://localhost:8000/api/unComplete/updateUncomplete",
         formData
       );
 
