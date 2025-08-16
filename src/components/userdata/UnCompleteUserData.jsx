@@ -14,6 +14,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import {useSelector, useDispatch } from 'react-redux';
 import './allpages.css';
+import Loader from "../pages/loader/Loader";
 const UnCompleteUserData = () => {
   
   const [gettoken, setGettoken] = React.useState(null);
@@ -47,7 +48,7 @@ const UnCompleteUserData = () => {
           `http://localhost:8000/api/unComplete/getAllprocess?clientId=${clientIdBase64Decode}&token=${gettoken}`
         );
         const obj = JSON.parse(JSON.stringify(response));
-         console.log( obj);
+        //  console.log( obj);
         if (obj.status === 200) {
           setUnCompleteDetails(obj.data.data);
         } else {
@@ -64,7 +65,9 @@ const UnCompleteUserData = () => {
   };
 
 
-  const reSendFunction = () => {};
+  const reSendFunction = () => {
+    
+  };
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
@@ -77,13 +80,7 @@ const UnCompleteUserData = () => {
   return (
     <>
     {loader ? (
-        <div className="loader-container d-flex justify-content-center align-items-center">
-          <img
-            src="../../../assets/images/loader.gif"
-            alt="Loading..."
-            className="loader-image"
-          />
-        </div>
+        <Loader />
       ) : (
       <div>
       <ToastContainer />
@@ -130,7 +127,7 @@ const UnCompleteUserData = () => {
                        
                                
                         <td>
-                          <a href="/"> View </a>
+                          <a href={item.originalFileName} target="_blank"> View </a>
                         </td>
                         <td>
                           {new Date(item.dateTimeOriginal).toLocaleDateString()} <br />
@@ -147,7 +144,7 @@ const UnCompleteUserData = () => {
                         </td>
                       </tr>
                             ))}
-                      {currentItems && currentItems == 0 &&(
+                      {currentItems && currentItems === 0 &&(
                               <tr>
                                 <td>No Record Found</td>
                               </tr>

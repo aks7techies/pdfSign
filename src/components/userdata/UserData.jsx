@@ -14,6 +14,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import './allpages.css';
 import UserHeaderTop from "../userheadertop/UserHeaderTop";
+import Loader from "../pages/loader/Loader";
 function UserData() {
   const [gettoken, setGettoken] = React.useState(null);
   const redirect = useNavigate();
@@ -74,13 +75,7 @@ function UserData() {
   return (
     <>
     {loader ? (
-        <div className="loader-container d-flex justify-content-center align-items-center">
-          <img
-            src="../../../assets/images/loader.gif"
-            alt="Loading..."
-            className="loader-image"
-          />
-        </div>
+        <Loader />
       ) : (
       <div>
       <ToastContainer />

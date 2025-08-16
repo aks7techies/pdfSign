@@ -1,11 +1,10 @@
 import React, { Suspense } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Loader from "./components/pages/loader/Loader";
 
 const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
-  </div>
+  <Loader />
 );
 
 // Pages

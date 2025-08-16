@@ -168,7 +168,6 @@ const ClientMaster = () => {
                   <div className="d-flex justify-content-between">
                     <h3>Clients Details</h3>
                     <Button className="text-capitalize" onClick={handleOpen}>
-                      {" "}
                       <PersonAddIcon /> Add Client
                     </Button>
                     <Modal

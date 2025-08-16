@@ -15,16 +15,13 @@ import AutoFixOffIcon from "@mui/icons-material/AutoFixOff";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 
 import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib";
-// import Webcam from "react-webcam";
 import { Document, Page, pdfjs } from "react-pdf";
-// import CapturePhoto from "./CapturePhoto";
-// import { useSelector } from "react-redux";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const UploadSignature = () => {
   const [numPages, setNumPages] = React.useState(null);
-  // const [openbox, setOpenbox] = React.useState(false);
+  
   const [preview, setPreview] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [fileName, setFileName] = React.useState(null);
@@ -35,12 +32,9 @@ const UploadSignature = () => {
   const [imgSrc, setImgSrc] = React.useState(null);
   const inputRef = useRef(null);
 
-  // const [pdfBytes, setPdfBytes] = React.useState(null);
   const [pdfLink, setPdfLink] = React.useState("assets/uploads/file2.pdf");
   const [showModal, setShowModal] = React.useState(false);
   const [showSingerModal, setShowSingerModal] = React.useState(false);
-  // const captureImageData = useSelector((state)=> state.captureImage.value);
-  // console.log(captureImageData);
 
   useEffect(() => {
     setShowModal(true);
@@ -97,26 +91,13 @@ const UploadSignature = () => {
           `Failed to fetch image: ${imageResponse.status} ${imageResponse.statusText}`
         );
       }
-
       const contentType = imageResponse.headers.get("content-type");
-      console.log("Image Content-Type:", contentType);
-
       if (!contentType || !contentType.startsWith("image/")) {
         throw new Error(`Expected image content-type but got: ${contentType}`);
       }
 
       // Step 4: Convert image to ArrayBuffer
       const imageBuffer = await imageResponse.arrayBuffer();
-
-      // Optional: Log first 10 bytes for debugging
-      const firstBytes = new Uint8Array(imageBuffer).slice(0, 10);
-      console.log(
-        "First bytes:",
-        Array.from(firstBytes)
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join(" ")
-      );
-
       // Step 5: Load PDF
       const pdfBytes = await pdfResponse.arrayBuffer();
       const pdfDoc = await PDFDocument.load(pdfBytes);
@@ -125,10 +106,10 @@ const UploadSignature = () => {
       let embeddedImage;
       try {
         if (contentType.includes("jpeg") || contentType.includes("jpg")) {
-          console.log("Embedding as JPEG...");
+         
           embeddedImage = await pdfDoc.embedJpg(imageBuffer);
         } else if (contentType.includes("png")) {
-          console.log("Embedding as PNG...");
+         
           embeddedImage = await pdfDoc.embedPng(imageBuffer);
         } else {
           throw new Error("Unsupported image format: " + contentType);
@@ -240,8 +221,6 @@ const UploadSignature = () => {
   const handleUpload = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    // console.log(formData);
-
     try {
       const response = await fetch(
         "http://localhost:8000/api/upload/uploadFile",
@@ -295,15 +274,14 @@ const UploadSignature = () => {
   };
 
   const submitForm_123 = () => {
-    console.log(fileName);
-    // if (fileName) {
-    embedImages(pdfLink, `assets/images/${fileName}`);
-    // }
+    // console.log(fileName);
+    if (fileName) {
+    embedImages(pdfLink, fileName);
+    }
   };
   const submitForm = () => {
     if (writeName) {
-      console.log(writeName);
-
+      // console.log(writeName);
       modifyPdf(pdfLink, writeName);
     }
   };
@@ -312,14 +290,7 @@ const UploadSignature = () => {
     setNumPages(numPages);
   }
 
-  // const customStyles = `
-  //   .react-pdf__Page__textContent {
-  //     display: none !important;
-  //   }
-  //   .react-pdf__Page__annotations {
-  //     display: none !important;
-  //   }
-  // `;
+ 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
     <>

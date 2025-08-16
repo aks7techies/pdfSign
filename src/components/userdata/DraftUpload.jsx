@@ -24,6 +24,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import {useSelector, useDispatch } from 'react-redux';
 import {saveData} from '../../redux/slices/historyDraftData';
+import Loader from "../pages/loader/Loader";
 
 const style = {
   position: "absolute",
@@ -169,7 +170,7 @@ const DraftUpload = () => {
 
   const confirmFunction = async (value) => {};
   const sendFunction = async (value) => {
-    console.log(value);
+    // console.log(value);
     const formData = {
       id: value.id,
       // clientId: value.clientId,
@@ -213,17 +214,12 @@ const DraftUpload = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = draftDetails.slice(indexOfFirstItem, indexOfLastItem);
+  
 
   return (
     <>
       {loader ? (
-        <div className="loader-container d-flex justify-content-center align-items-center">
-          <img
-            src="../../../assets/images/loader.gif"
-            alt="Loading..."
-            className="loader-image"
-          />
-        </div>
+       <Loader />
       ) : (
         <div>
           <Header />
@@ -600,9 +596,9 @@ const DraftUpload = () => {
                                 </td>
                               </tr>
                             ))}
-                            {currentItems && currentItems == 0 &&(
-                              <tr>
-                                <td>No Record Found</td>
+                            {currentItems && currentItems.length === 0 &&(
+                              <tr className="text-center">
+                                <td colSpan={5}>No Record Found</td>
                               </tr>
                             )}
                         </tbody>
